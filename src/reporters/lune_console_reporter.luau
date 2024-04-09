@@ -49,6 +49,10 @@ function reporter.print_failure(type: "CHECK" | "REQUIRE", f: Failure)
     print_test_info_once()
     print_indent(`{color("red", `{type} FAILED:`)} {f.location.file}:{f.location.line}`)
     print_indent(`{color("yellow", f.message)}`, 1)
+    if f.user_msg ~= nil then
+        print_indent("with message:")
+        print_indent(f.user_msg, 1)
+    end
     print("")
 end
 

@@ -6,6 +6,7 @@ type Location = {
 export type Failure = {
     location: Location,
     message: string,
+    user_msg: string?,
 }
 
 export type TestError = {

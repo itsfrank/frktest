@@ -9,8 +9,6 @@ Every other file is a test file, note that `_run.luau` requires and calls the
 returned function for each test file. This test framework does not have test
 discovery yet.
 
-All assertions in the tests fail except for one.
-
 You can run the tests from the root folder of this repo with:
 
 ```sh

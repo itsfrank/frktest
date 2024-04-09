@@ -1,5 +1,4 @@
 local types = require("./types")
-local utils = require("./utils")
 
 type Failure = types.Failure
 
@@ -7,6 +6,7 @@ local _state = {}
 _state.listeners = {}
 _state.listeners.check_failed = {} :: { [number]: (Failure) -> nil }
 _state.listeners.require_failed = {} :: { [number]: (Failure) -> nil }
+_state.current_user_msg = nil :: string?
 _state = require("./state").get_state("assert", _state)
 
 local test = require("./test")
@@ -21,12 +21,21 @@ function make_assert<T...>(impl: (T...) -> Failure?): (T...) -> Failure?
     return function(...)
         local f = impl(...)
         if f == nil then
+            _state.current_user_msg = nil
             return nil
         end
+
+        -- check for user message
+        if _state.current_user_msg ~= nil then
+            f.user_msg = _state.current_user_msg
+        end
+
         local current_test = test.current_test()
         if current_test ~= nil then
             current_test.failed = true
         end
+
+        _state.current_user_msg = nil
         return f
     end
 end
@@ -65,6 +74,11 @@ end
 
 function assert.on_require_failed(f: (Failure) -> nil)
     table.insert(_state.listeners.require_failed, f)
+end
+
+-- used to add custom messages on assertion failures
+function assert.msg(s: string)
+    _state.current_user_msg = s
 end
 
 -- assertion implementaitons
