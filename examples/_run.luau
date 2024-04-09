@@ -5,6 +5,7 @@ function load_tests()
     require("./messages")()
     require("./errors")()
     require("./parametrized")()
+    require("./arrays")()
     require("./tables")()
 end
 

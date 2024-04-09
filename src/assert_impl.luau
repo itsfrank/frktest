@@ -17,6 +17,8 @@ function make_failure(message: string): Failure
     }
 end
 
+-- value assertions
+
 function assert_impl.equal<T>(a: T, b: T): Failure?
     if a == b then
         return nil
@@ -87,6 +89,8 @@ function assert_impl.falsy<T>(a: any): Failure?
     return make_failure(`if not {a} - condition failed`)
 end
 
+-- error/exception assertions
+
 function assert_impl.should_error<T...>(f: (T...) -> any?): Failure?
     local ok, _ = pcall(f)
     if not ok then
@@ -101,6 +105,59 @@ function assert_impl.should_not_error<T...>(f: (T...) -> any?): Failure?
         return nil
     end
     return make_failure(`errored: {err}`)
+end
+
+-- array assertions
+
+function assert_impl.array_contains(a: { [number]: any }, keys: any | { [number]: any }): Failure?
+    if type(keys) ~= "table" then
+        keys = { keys }
+    end
+    local keys_table = {}
+    for _, k in ipairs(keys) do
+        keys_table[k] = false
+    end
+
+    for _, e in ipairs(a) do
+        keys_table[e] = true
+    end
+
+    local missing = {}
+    for k, found in pairs(keys_table) do
+        if not found then
+            if type(k) == "string" then
+                k = '"' .. k .. '"'
+            end
+            table.insert(missing, k)
+        end
+    end
+
+    if #missing == 0 then
+        return nil
+    end
+
+    return make_failure(`missing values: {table.concat(missing, ", ")}`)
+end
+
+-- table assertions
+
+function assert_impl.table_contains(t: { [any]: any }, keys: any | { [number]: any }): Failure?
+    if type(keys) ~= "table" then
+        keys = { keys }
+    end
+
+    local missing = {}
+    for _, k in ipairs(keys) do
+        if t[k] == nil then
+            table.insert(missing, k)
+        end
+    end
+
+    if #missing == 0 then
+        return nil
+    end
+
+    return make_failure(`missing keys: {table.concat(missing, ", ")}`)
 end
 
 return assert_impl

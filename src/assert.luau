@@ -85,8 +85,14 @@ end
 assert.check = {}
 assert.require = {}
 
+assert.check.array = {}
+assert.require.array = {}
+assert.check.table = {}
+assert.require.table = {}
+
 local assert_impl = require("./assert_impl")
 
+-- value assertions
 assert.check.equal = make_check(assert_impl.equal)
 assert.require.equal = make_require(assert_impl.equal)
 
@@ -117,10 +123,19 @@ assert.require.truthy = make_require(assert_impl.truthy)
 assert.check.falsy = make_check(assert_impl.falsy)
 assert.require.falsy = make_require(assert_impl.falsy)
 
+-- error/exception assertions
 assert.check.should_error = make_check(assert_impl.should_error)
 assert.require.should_errors = make_require(assert_impl.should_error)
 
 assert.check.should_not_error = make_check(assert_impl.should_not_error)
 assert.require.should_not_errors = make_require(assert_impl.should_not_error)
+
+-- array assertions
+assert.check.array.contains = make_check(assert_impl.array_contains)
+assert.require.array.contains = make_require(assert_impl.array_contains)
+
+-- table assertions
+assert.check.table.contains = make_check(assert_impl.table_contains)
+assert.require.table.contains = make_require(assert_impl.table_contains)
 
 return assert
