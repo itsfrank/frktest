@@ -9,18 +9,6 @@ _state.listeners.check_failed = {} :: { [number]: (Failure) -> nil }
 _state.listeners.require_failed = {} :: { [number]: (Failure) -> nil }
 _state = require("./state").get_state("assert", _state)
 
-function make_failure(message: string): Failure
-    local file, line = debug.info(5, "sl")
-    file = utils.clean_filename(file)
-    return {
-        location = {
-            file = file,
-            line = line,
-        },
-        message = message,
-    }
-end
-
 local test = require("./test")
 
 function exec_listeners<T>(i: T, listeners: { [number]: (T) -> nil })
@@ -83,14 +71,21 @@ end
 assert.check = {}
 assert.require = {}
 
-function impl_equal<T>(a: T, b: T): Failure?
-    if a == b then
-        return nil
-    end
+local assert_impl = require("./assert_impl")
+assert.check.equal = make_check(assert_impl.equal)
+assert.require.equal = make_require(assert_impl.equal)
 
-    return make_failure(`{a} == {b}`)
-end
-assert.check.equal = make_check(impl_equal)
-assert.require.equal = make_require(impl_equal)
+assert.check.is_true = make_check(assert_impl.is_true)
+assert.require.is_true = make_require(assert_impl.is_true)
+
+assert.check.is_false = make_check(assert_impl.is_false)
+assert.require.is_false = make_require(assert_impl.is_false)
+
+assert.check.truthy = make_check(assert_impl.truthy)
+assert.require.truthy = make_require(assert_impl.truthy)
+
+assert.check.falsy = make_check(assert_impl.falsy)
+assert.require.falsy = make_require(assert_impl.falsy)
+
 
 return assert

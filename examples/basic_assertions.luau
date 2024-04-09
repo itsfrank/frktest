@@ -31,4 +31,22 @@ return function()
             check.equal("foo", "bar")
         end)
     end)
+
+    test.suite("Boolean checks", function()
+        test.case("is_true", function()
+            check.is_true(false)
+        end)
+
+        test.case("is_false", function()
+            check.is_false(true)
+        end)
+
+        test.case("truthy", function()
+            check.truthy(nil)
+        end)
+
+        test.case("falsy", function()
+            check.falsy(10)
+        end)
+    end)
 end
