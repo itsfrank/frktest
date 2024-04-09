@@ -1,3 +1,8 @@
+-- usage:
+--     local printer = require("@frktest/printers/lune_printer")
+--     printer.init()
+--     -- run tests
+
 local stdio = require("@lune/stdio")
 local types = require("../types")
 
