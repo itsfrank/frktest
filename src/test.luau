@@ -79,7 +79,17 @@ function test.run_tests()
         t.failed = false
         _state.current_exec_test = t
         exec_listeners(t, _state.listeners.test_enter)
-        t.fn()
+        local ok, err = pcall(function()
+            t.fn()
+        end)
+
+        if not ok then
+            -- check if the error is cause by assert.require
+            if type(err) ~= "table" and err["_is_frktest_require"] ~= true then
+                error(err)
+            end
+        end
+
         exec_listeners(t, _state.listeners.test_leave)
         _state.current_exec_test = nil
 

@@ -15,7 +15,7 @@ function clean_filename(name: string)
 end
 
 function make_failure(message: string): Failure
-    local file, line = debug.info(4, "sl")
+    local file, line = debug.info(5, "sl")
     file = clean_filename(file)
     return {
         location = {
