@@ -34,7 +34,7 @@ function color(c: stdio.Color, s: string)
     return `{stdio.color(c)}{s}{stdio.color("reset")}`
 end
 
-function printer.print_failure(f: Failure)
+function printer.print_failure(type: "CHECK" | "REQUIRE", f: Failure)
     if _state.current_suite ~= nil and _state.suite_printed == false then
         _state.suite_printed = true
         print_indent(`Suite: {color("cyan", _state.current_suite.name)}`, -2)
@@ -47,7 +47,7 @@ function printer.print_failure(f: Failure)
         print("")
     end
 
-    print_indent(`{color("red", "CHECK FAILED:")} {f.location.file}:{f.location.line}`)
+    print_indent(`{color("red", `{type} FAILED:`)} {f.location.file}:{f.location.line}`)
     print_indent(`{color("yellow", f.message)}`, 1)
     print("")
 end
@@ -103,7 +103,10 @@ function printer.init()
 
     local assert = require("../assert")
     assert.on_check_failed(function(f)
-        printer.print_failure(f)
+        printer.print_failure("CHECK", f)
+    end)
+    assert.on_require_failed(function(f)
+        printer.print_failure("REQUIRE", f)
     end)
 end
 
