@@ -1,5 +1,5 @@
 function load_tests()
-    require("./test1")()
+    require("./basic_assertions")()
 end
 
 function run_tests()
