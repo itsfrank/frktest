@@ -65,7 +65,6 @@ function assert_impl.should_not_error<T...>(f: (T...) -> any?): Failure?
     if ok then
         return nil
     end
-    error("bug in fwk")
     return make_failure(`errored: {err}`)
 end
 
