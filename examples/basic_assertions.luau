@@ -4,6 +4,12 @@ local check = frktest.assert.check
 local require = frktest.assert.require
 
 return function()
+    test.suite("Passing", function()
+        test.case("The only passing test", function()
+            check.is_true(true)
+        end)
+    end)
+
     test.suite("Check and require", function()
         test.case("checks", function()
             -- checks dont halt the test
