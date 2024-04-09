@@ -73,6 +73,10 @@ function count_tests(): number
     return count
 end
 
+-- set true to remove xpcall
+-- used to debug the framework itself
+test._hard_errors = false
+
 function test.run_tests()
     local tests_ran = 0
     local tests_passed = 0
@@ -83,27 +87,31 @@ function test.run_tests()
         _state.current_exec_test = t
         exec_listeners(t, _state.listeners.test_enter)
 
-        local _, _ = xpcall(function()
+        if test._hard_errors then
             t.fn()
-        end, function(err)
-            if type(err) == "table" and err["_is_frktest_require"] == true then
-                return nil -- no extra work to do listeners will handle the failure
-            end
-            local strace = debug.traceback("", 2)
-            local file, line = debug.info(3, "sl")
-            file = utils.clean_filename(file)
-            exec_listeners({
-                location = {
-                    file = file,
-                    line = line,
-                },
-                strace = strace,
-                error = err,
-            }, _state.listeners.test_error)
+        else
+            local _, _ = xpcall(function()
+                t.fn()
+            end, function(err)
+                if type(err) == "table" and err["_is_frktest_require"] == true then
+                    return nil -- no extra work to do listeners will handle the failure
+                end
+                local strace = debug.traceback("", 2)
+                local file, line = debug.info(3, "sl")
+                file = utils.clean_filename(file)
+                exec_listeners({
+                    location = {
+                        file = file,
+                        line = line,
+                    },
+                    strace = strace,
+                    error = err,
+                }, _state.listeners.test_error)
 
-            t.failed = true
-            return nil
-        end)
+                t.failed = true
+                return nil
+            end)
+        end
 
         exec_listeners(t, _state.listeners.test_leave)
         _state.current_exec_test = nil
