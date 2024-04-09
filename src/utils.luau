@@ -19,7 +19,7 @@ function utils.make_indent(i: number): string
     return s
 end
 
-function utils.multiline_to_array(s: string): { [number]: string }
+function utils.multiline_to_array(s: string): { string }
     local res = {}
     for line in string.gmatch(s .. "\n", "(.-)\n") do
         table.insert(res, line)

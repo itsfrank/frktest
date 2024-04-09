@@ -7,6 +7,18 @@ export type Failure = {
     location: Location,
     message: string,
     user_msg: string?,
+    complex_info: {
+        type: string,
+        data: any,
+    }?,
+}
+
+export type ArrayDiff<T> = {
+    {
+        i: number,
+        v: T,
+        t: "+" | "-",
+    }
 }
 
 export type TestError = {
@@ -24,7 +36,7 @@ export type Test = {
 export type Suite = {
     name: string,
     fn: () -> nil,
-    tests: { [number]: Test },
+    tests: { Test },
 }
 
 export type ExecCounts = {

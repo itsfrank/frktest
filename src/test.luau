@@ -10,21 +10,21 @@ type ExecResult = types.ExecResult
 type TestError = types.TestError
 
 local _state = {}
-_state.suites = {} :: { [number]: Suite }
-_state.global_suite = {} :: { [number]: Test }
+_state.suites = {} :: { Suite }
+_state.global_suite = {} :: { Test }
 _state.current_load_suite = nil :: Suite?
 
 _state.current_exec_suite = nil :: Suite?
 _state.current_exec_test = nil :: Test?
 
 _state.listeners = {}
-_state.listeners.suite_enter = {} :: { [number]: (Suite) -> nil }
-_state.listeners.suite_leave = {} :: { [number]: (Suite) -> nil }
-_state.listeners.test_enter = {} :: { [number]: (Test) -> nil }
-_state.listeners.test_leave = {} :: { [number]: (Test) -> nil }
-_state.listeners.exec_begin = {} :: { [number]: (ExecCounts) -> nil }
-_state.listeners.exec_end = {} :: { [number]: (ExecResult) -> nil }
-_state.listeners.test_error = {} :: { [number]: (TestError) -> nil }
+_state.listeners.suite_enter = {} :: { (Suite) -> nil }
+_state.listeners.suite_leave = {} :: { (Suite) -> nil }
+_state.listeners.test_enter = {} :: { (Test) -> nil }
+_state.listeners.test_leave = {} :: { (Test) -> nil }
+_state.listeners.exec_begin = {} :: { (ExecCounts) -> nil }
+_state.listeners.exec_end = {} :: { (ExecResult) -> nil }
+_state.listeners.test_error = {} :: { (TestError) -> nil }
 
 _state = require("./state").get_state("test", _state)
 
@@ -59,7 +59,7 @@ function test.load_suites()
     end
 end
 
-function exec_listeners<T>(i: T, listeners: { [number]: (T) -> nil })
+function exec_listeners<T>(i: T, listeners: { (T) -> nil })
     for _, l in ipairs(listeners) do
         l(i)
     end

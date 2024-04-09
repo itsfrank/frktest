@@ -8,6 +8,7 @@ local types = require("../types")
 local utils = require("../utils")
 
 type Failure = types.Failure
+type ArrayDiff<T> = types.ArrayDiff<T>
 type TestError = types.TestError
 
 local reporter = {}
@@ -45,10 +46,35 @@ function print_test_info_once()
     end
 end
 
+function make_array_diff_string<T>(diff: ArrayDiff<T>): string
+    local make_line = function<T>(i: number, v: T, t: "+" | "-"): string
+        local color_s: "green" | "red" = if t == "+" then "green" else "red"
+        return color(color_s, `{t} [{i}]: {v}`)
+    end
+    local message = {}
+    for _, d in ipairs(diff) do
+        table.insert(message, make_line(d.i, d.v, d.t))
+    end
+    return table.concat(message, "\n")
+end
+
+function handle_complex_info(type: string, data: any): string?
+    if type == "ArrayDiff" then
+        return make_array_diff_string(data :: ArrayDiff<any>)
+    end
+    return nil
+end
+
 function reporter.print_failure(type: "CHECK" | "REQUIRE", f: Failure)
     print_test_info_once()
     print_indent(`{color("red", `{type} FAILED:`)} {f.location.file}:{f.location.line}`)
     print_indent(`{color("yellow", f.message)}`, 1)
+    if f.complex_info ~= nil then
+        local complex_msg = handle_complex_info(f.complex_info.type, f.complex_info.data)
+        if complex_msg ~= nil then
+            print(utils.indent_multiline(complex_msg, _state.indent + 1))
+        end
+    end
     if f.user_msg ~= nil then
         print_indent("with message:")
         print_indent(color("yellow", f.user_msg), 1)

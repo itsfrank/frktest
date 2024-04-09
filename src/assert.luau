@@ -4,14 +4,14 @@ type Failure = types.Failure
 
 local _state = {}
 _state.listeners = {}
-_state.listeners.check_failed = {} :: { [number]: (Failure) -> nil }
-_state.listeners.require_failed = {} :: { [number]: (Failure) -> nil }
+_state.listeners.check_failed = {} :: { (Failure) -> nil }
+_state.listeners.require_failed = {} :: { (Failure) -> nil }
 _state.current_user_msg = nil :: string?
 _state = require("./state").get_state("assert", _state)
 
 local test = require("./test")
 
-function exec_listeners<T>(i: T, listeners: { [number]: (T) -> nil })
+function exec_listeners<T>(i: T, listeners: { (T) -> nil })
     for _, l in ipairs(listeners) do
         l(i)
     end
@@ -133,6 +133,9 @@ assert.require.should_not_errors = make_require(assert_impl.should_not_error)
 -- array assertions
 assert.check.array.contains = make_check(assert_impl.array_contains)
 assert.require.array.contains = make_require(assert_impl.array_contains)
+
+assert.check.array.equal = make_check(assert_impl.array_equal)
+assert.require.array.equal = make_require(assert_impl.array_equal)
 
 -- table assertions
 assert.check.table.contains = make_check(assert_impl.table_contains)

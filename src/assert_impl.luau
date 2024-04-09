@@ -2,6 +2,7 @@ local types = require("./types")
 local utils = require("./utils")
 
 type Failure = types.Failure
+type ArrayDiff<T> = types.ArrayDiff<T>
 
 local assert_impl = {}
 
@@ -109,12 +110,12 @@ end
 
 -- array assertions
 
-function assert_impl.array_contains(a: { [number]: any }, keys: any | { [number]: any }): Failure?
+function assert_impl.array_contains<T>(a: { T }, keys: T | { T }): Failure?
     if type(keys) ~= "table" then
         keys = { keys }
     end
     local keys_table = {}
-    for _, k in ipairs(keys) do
+    for _, k in ipairs(keys :: { T }) do
         keys_table[k] = false
     end
 
@@ -137,6 +138,39 @@ function assert_impl.array_contains(a: { [number]: any }, keys: any | { [number]
     end
 
     return make_failure(`missing values: {table.concat(missing, ", ")}`)
+end
+
+function assert_impl.array_equal<T>(a: { [number]: T }, b: { [number]: T }): Failure?
+    local min_len = math.min(#a, #b)
+    local diff = {} :: ArrayDiff<T>
+
+    for i = 1, min_len do
+        if a[i] ~= b[i] then
+            table.insert(diff, { i = i, v = b[i], t = "-" })
+            table.insert(diff, { i = i, v = a[i], t = "+" })
+        end
+    end
+
+    if #a ~= #b then
+        local max_len = math.max(#a, #b)
+        local longer: { [number]: T } = if #a > #b then a else b
+        local type: "+" | "-" = if #a > #b then "+" else "-"
+        for i = min_len + 1, max_len do
+            table.insert(diff, { i = i, v = longer[i], t = type })
+        end
+    end
+
+    if #diff == 0 then
+        return nil
+    end
+
+    local f = make_failure("Arrays were not equal")
+    f.complex_info = {
+        type = "ArrayDiff",
+        data = diff,
+    }
+
+    return f
 end
 
 -- table assertions
