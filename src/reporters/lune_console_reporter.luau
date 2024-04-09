@@ -1,6 +1,6 @@
 -- usage:
---     local printer = require("@frktest/printers/lune_printer")
---     printer.init()
+--     local reporter = require("@frktest/reporters/lune_console_reporter")
+--     reporter.init()
 --     -- run tests
 
 local stdio = require("@lune/stdio")
@@ -10,7 +10,7 @@ local utils = require("../utils")
 type Failure = types.Failure
 type TestError = types.TestError
 
-local printer = {}
+local reporter = {}
 
 local _state = {}
 _state.indent = 0
@@ -18,7 +18,7 @@ _state.current_suite = nil :: types.Suite?
 _state.current_test = nil :: types.Test?
 _state.suite_printed = false
 _state.test_printed = false
-_state = require("../state").get_state("lune_printer", _state)
+_state = require("../state").get_state("lune_console_reporter", _state)
 
 function print_indent(s: string, offset: number?)
     if offset == nil then
@@ -45,14 +45,14 @@ function print_test_info_once()
     end
 end
 
-function printer.print_failure(type: "CHECK" | "REQUIRE", f: Failure)
+function reporter.print_failure(type: "CHECK" | "REQUIRE", f: Failure)
     print_test_info_once()
     print_indent(`{color("red", `{type} FAILED:`)} {f.location.file}:{f.location.line}`)
     print_indent(`{color("yellow", f.message)}`, 1)
     print("")
 end
 
-function printer.print_test_error(e: TestError)
+function reporter.print_test_error(e: TestError)
     print_test_info_once()
     print_indent(`{color("red", "ERROR:")} {e.location.file}:{e.location.line}`)
     print_indent(`{color("yellow", e.error)}`, 1)
@@ -61,12 +61,12 @@ function printer.print_test_error(e: TestError)
     print("")
 end
 
-function printer.print_counts(tests: number, suites: number)
+function reporter.print_counts(tests: number, suites: number)
     print(`Running - {tests} tests | {suites} suites...`)
     print("")
 end
 
-function printer.print_summary(ran: number, passed: number, failed: number)
+function reporter.print_summary(ran: number, passed: number, failed: number)
     print("--------------------")
     local summary = `Tests Ran: {ran}`
     if passed > 0 then
@@ -81,7 +81,7 @@ function printer.print_summary(ran: number, passed: number, failed: number)
     print(`status: {status}`)
 end
 
-function printer.init()
+function reporter.init()
     -- register testing events to keep track of current testing state
     local test = require("../test")
     test.on_suite_enter(function(s)
@@ -104,23 +104,23 @@ function printer.init()
     end)
 
     test.on_exec_begin(function(c)
-        printer.print_counts(c.tests, c.suites)
+        reporter.print_counts(c.tests, c.suites)
     end)
     test.on_exec_end(function(r)
-        printer.print_summary(r.ran, r.passed, r.failed)
+        reporter.print_summary(r.ran, r.passed, r.failed)
     end)
 
     test.on_test_error(function(e)
-        printer.print_test_error(e)
+        reporter.print_test_error(e)
     end)
 
     local assert = require("../assert")
     assert.on_check_failed(function(f)
-        printer.print_failure("CHECK", f)
+        reporter.print_failure("CHECK", f)
     end)
     assert.on_require_failed(function(f)
-        printer.print_failure("REQUIRE", f)
+        reporter.print_failure("REQUIRE", f)
     end)
 end
 
-return printer
+return reporter

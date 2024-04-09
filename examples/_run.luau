@@ -8,9 +8,9 @@ end
 
 function run_tests()
     local frktest = require("@frktest/frktest")
-    local lune_printer = require("@frktest/printers/lune_printer")
+    local lune_console_reporter = require("@frktest/reporters/lune_console_reporter")
 
-    lune_printer.init()
+    lune_console_reporter.init()
     frktest.run()
 end
 
