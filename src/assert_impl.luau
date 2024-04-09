@@ -24,6 +24,41 @@ function assert_impl.equal<T>(a: T, b: T): Failure?
     return make_failure(`{a} == {b}`)
 end
 
+function assert_impl.not_equal<T>(a: T, b: T): Failure?
+    if a ~= b then
+        return nil
+    end
+    return make_failure(`{a} ~= {b}`)
+end
+
+function assert_impl.greater(a: number, b: number): Failure?
+    if a > b then
+        return nil
+    end
+    return make_failure(`{a} > {b}`)
+end
+
+function assert_impl.greater_eq(a: number, b: number): Failure?
+    if a >= b then
+        return nil
+    end
+    return make_failure(`{a} >= {b}`)
+end
+
+function assert_impl.lesser(a: number, b: number): Failure?
+    if a < b then
+        return nil
+    end
+    return make_failure(`{a} < {b}`)
+end
+
+function assert_impl.lesser_eq(a: number, b: number): Failure?
+    if a <= b then
+        return nil
+    end
+    return make_failure(`{a} <= {b}`)
+end
+
 function assert_impl.is_true<T>(a: boolean): Failure?
     if a == true then
         return nil

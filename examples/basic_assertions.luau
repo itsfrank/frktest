@@ -32,6 +32,22 @@ return function()
         end)
     end)
 
+    test.suite("Inequality", function()
+        test.case("not equal", function()
+            check.not_equal(10, 10)
+        end)
+
+        test.case("greater", function()
+            check.greater(10, 10)
+            check.greater_eq(9, 10)
+        end)
+
+        test.case("lesser", function()
+            check.lesser(10, 10)
+            check.lesser_eq(10, 9)
+        end)
+    end)
+
     test.suite("Boolean checks", function()
         test.case("is_true", function()
             check.is_true(false)

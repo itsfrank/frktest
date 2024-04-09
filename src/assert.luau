@@ -72,8 +72,24 @@ assert.check = {}
 assert.require = {}
 
 local assert_impl = require("./assert_impl")
+
 assert.check.equal = make_check(assert_impl.equal)
 assert.require.equal = make_require(assert_impl.equal)
+
+assert.check.not_equal = make_check(assert_impl.not_equal)
+assert.require.not_equal = make_require(assert_impl.not_equal)
+
+assert.check.greater = make_check(assert_impl.greater)
+assert.require.greater = make_require(assert_impl.greater)
+
+assert.check.greater_eq = make_check(assert_impl.greater_eq)
+assert.require.greater_eq = make_require(assert_impl.greater_eq)
+
+assert.check.lesser = make_check(assert_impl.lesser)
+assert.require.lesser = make_require(assert_impl.lesser)
+
+assert.check.lesser_eq = make_check(assert_impl.lesser_eq)
+assert.require.lesser_eq = make_require(assert_impl.lesser_eq)
 
 assert.check.is_true = make_check(assert_impl.is_true)
 assert.require.is_true = make_require(assert_impl.is_true)
