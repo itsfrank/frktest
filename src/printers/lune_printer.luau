@@ -5,8 +5,10 @@
 
 local stdio = require("@lune/stdio")
 local types = require("../types")
+local utils = require("../utils")
 
 type Failure = types.Failure
+type TestError = types.TestError
 
 local printer = {}
 
@@ -23,18 +25,14 @@ function print_indent(s: string, offset: number?)
         offset = 0
     end
     local indent = _state.indent + offset :: number
-    local indent_s = ""
-    for j = 0, indent - 1 do
-        indent_s ..= "    "
-    end
-    return print(indent_s .. s)
+    return print(utils.make_indent(indent) .. s)
 end
 
 function color(c: stdio.Color, s: string)
     return `{stdio.color(c)}{s}{stdio.color("reset")}`
 end
 
-function printer.print_failure(type: "CHECK" | "REQUIRE", f: Failure)
+function print_test_info_once()
     if _state.current_suite ~= nil and _state.suite_printed == false then
         _state.suite_printed = true
         print_indent(`Suite: {color("cyan", _state.current_suite.name)}`, -2)
@@ -46,9 +44,21 @@ function printer.print_failure(type: "CHECK" | "REQUIRE", f: Failure)
         print_indent(`Test: {color("cyan", _state.current_test.name)}`, -1)
         print("")
     end
+end
 
+function printer.print_failure(type: "CHECK" | "REQUIRE", f: Failure)
+    print_test_info_once()
     print_indent(`{color("red", `{type} FAILED:`)} {f.location.file}:{f.location.line}`)
     print_indent(`{color("yellow", f.message)}`, 1)
+    print("")
+end
+
+function printer.print_test_error(e: TestError)
+    print_test_info_once()
+    print_indent(`{color("red", "ERROR:")} {e.location.file}:{e.location.line}`)
+    print_indent(`{color("yellow", e.error)}`, 1)
+    print_indent("trace:")
+    print(`{color("yellow", utils.indent_multiline(utils.trim(e.strace), _state.indent + 1))}`)
     print("")
 end
 
@@ -99,6 +109,10 @@ function printer.init()
     end)
     test.on_exec_end(function(r)
         printer.print_summary(r.ran, r.passed, r.failed)
+    end)
+
+    test.on_test_error(function(e)
+        printer.print_test_error(e)
     end)
 
     local assert = require("../assert")

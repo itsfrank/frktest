@@ -1,9 +1,17 @@
+type Location = {
+    file: string,
+    line: string,
+}
+
 export type Failure = {
-    location: {
-        file: string,
-        line: string,
-    },
+    location: Location,
     message: string,
+}
+
+export type TestError = {
+    location: Location,
+    strace: string,
+    error: any,
 }
 
 export type Test = {

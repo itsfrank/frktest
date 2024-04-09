@@ -1,4 +1,5 @@
 local types = require("./types")
+local utils = require("./utils")
 
 type Failure = types.Failure
 
@@ -8,15 +9,9 @@ _state.listeners.check_failed = {} :: { [number]: (Failure) -> nil }
 _state.listeners.require_failed = {} :: { [number]: (Failure) -> nil }
 _state = require("./state").get_state("assert", _state)
 
--- i think this is a lune issue, but debug.info returns [string "<filename>"]
-function clean_filename(name: string)
-    local front_trimmed = name:sub(10)
-    return front_trimmed:sub(1, -3)
-end
-
 function make_failure(message: string): Failure
     local file, line = debug.info(5, "sl")
-    file = clean_filename(file)
+    file = utils.clean_filename(file)
     return {
         location = {
             file = file,

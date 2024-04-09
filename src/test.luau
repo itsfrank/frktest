@@ -1,4 +1,5 @@
 local types = require("./types")
+local utils = require("./utils")
 
 local test = {}
 
@@ -6,6 +7,7 @@ type Test = types.Test
 type Suite = types.Suite
 type ExecCounts = types.ExecCounts
 type ExecResult = types.ExecResult
+type TestError = types.TestError
 
 local _state = {}
 _state.suites = {} :: { [number]: Suite }
@@ -22,6 +24,7 @@ _state.listeners.test_enter = {} :: { [number]: (Test) -> nil }
 _state.listeners.test_leave = {} :: { [number]: (Test) -> nil }
 _state.listeners.exec_begin = {} :: { [number]: (ExecCounts) -> nil }
 _state.listeners.exec_end = {} :: { [number]: (ExecResult) -> nil }
+_state.listeners.test_error = {} :: { [number]: (TestError) -> nil }
 
 _state = require("./state").get_state("test", _state)
 
@@ -79,16 +82,28 @@ function test.run_tests()
         t.failed = false
         _state.current_exec_test = t
         exec_listeners(t, _state.listeners.test_enter)
-        local ok, err = pcall(function()
-            t.fn()
-        end)
 
-        if not ok then
-            -- check if the error is cause by assert.require
-            if type(err) ~= "table" and err["_is_frktest_require"] ~= true then
-                error(err)
+        local _, _ = xpcall(function()
+            t.fn()
+        end, function(err)
+            if type(err) == "table" and err["_is_frktest_require"] == true then
+                return nil -- no extra work to do listeners will handle the failure
             end
-        end
+            local strace = debug.traceback("", 2)
+            local file, line = debug.info(3, "sl")
+            file = utils.clean_filename(file)
+            exec_listeners({
+                location = {
+                    file = file,
+                    line = line,
+                },
+                strace = strace,
+                error = err,
+            }, _state.listeners.test_error)
+
+            t.failed = true
+            return nil
+        end)
 
         exec_listeners(t, _state.listeners.test_leave)
         _state.current_exec_test = nil
@@ -149,6 +164,10 @@ end
 
 function test.on_exec_end(f: (ExecResult) -> nil)
     table.insert(_state.listeners.exec_end, f)
+end
+
+function test.on_test_error(f: (TestError) -> nil)
+    table.insert(_state.listeners.test_error, f)
 end
 
 function test.reset()
