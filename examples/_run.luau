@@ -1,5 +1,6 @@
 function load_tests()
     -- tests execute in the order they are loaded
+    require("./suites_cases")()
     require("./basic_assertions")()
     require("./messages")()
     require("./errors")()
