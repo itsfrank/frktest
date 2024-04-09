@@ -51,7 +51,7 @@ function reporter.print_failure(type: "CHECK" | "REQUIRE", f: Failure)
     print_indent(`{color("yellow", f.message)}`, 1)
     if f.user_msg ~= nil then
         print_indent("with message:")
-        print_indent(f.user_msg, 1)
+        print_indent(color("yellow", f.user_msg), 1)
     end
     print("")
 end
