@@ -52,4 +52,21 @@ function assert_impl.falsy<T>(a: any): Failure?
     return make_failure(`if not {a} - condition failed`)
 end
 
+function assert_impl.should_error<T...>(f: (T...) -> any?): Failure?
+    local ok, _ = pcall(f)
+    if not ok then
+        return nil
+    end
+    return make_failure(`did not error`)
+end
+
+function assert_impl.should_not_error<T...>(f: (T...) -> any?): Failure?
+    local ok, err = pcall(f)
+    if ok then
+        return nil
+    end
+    error("bug in fwk")
+    return make_failure(`errored: {err}`)
+end
+
 return assert_impl

@@ -87,5 +87,10 @@ assert.require.truthy = make_require(assert_impl.truthy)
 assert.check.falsy = make_check(assert_impl.falsy)
 assert.require.falsy = make_require(assert_impl.falsy)
 
+assert.check.should_error = make_check(assert_impl.should_error)
+assert.require.should_errors = make_require(assert_impl.should_error)
+
+assert.check.should_not_error = make_check(assert_impl.should_not_error)
+assert.require.should_not_errors = make_require(assert_impl.should_not_error)
 
 return assert
