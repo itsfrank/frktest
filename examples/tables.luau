@@ -9,7 +9,7 @@ return function()
             local b = { foo = 1 }
             local c = a
             check.equal(a, b) -- fails, equal checks the address of tables
-            check.not_equal(a, c) -- fails, the liter
+            check.not_equal(a, c) -- fails, variables pointing to the same table equal eachother
         end)
     end)
 end
