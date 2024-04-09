@@ -4,6 +4,7 @@
     "*": true
   },
   "aliases": {
-    "frktest": "./src/"
+    "frktest": "src/",
+    "lune": "~/.lune/.typedefs/0.8.2/"
   }
 }
