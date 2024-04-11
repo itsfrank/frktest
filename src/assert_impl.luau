@@ -2,7 +2,7 @@ local types = require("./types")
 local utils = require("./utils")
 
 type Failure = types.Failure
-type ArrayDiff<T> = types.ArrayDiff<T>
+type DiffEntry<T> = types.DiffEntry<T>
 
 local assert_impl = {}
 
@@ -142,12 +142,11 @@ end
 
 function assert_impl.array_equal<T>(a: { [number]: T }, b: { [number]: T }): Failure?
     local min_len = math.min(#a, #b)
-    local diff = {} :: ArrayDiff<T>
+    local diff = {} :: { [number]: DiffEntry<T> }
 
     for i = 1, min_len do
         if a[i] ~= b[i] then
-            table.insert(diff, { i = i, v = b[i], t = "-" })
-            table.insert(diff, { i = i, v = a[i], t = "+" })
+            table.insert(diff, { k = i, v = { a = a[i], b = b[i] }, t = "~" })
         end
     end
 
@@ -156,7 +155,7 @@ function assert_impl.array_equal<T>(a: { [number]: T }, b: { [number]: T }): Fai
         local longer: { [number]: T } = if #a > #b then a else b
         local type: "+" | "-" = if #a > #b then "+" else "-"
         for i = min_len + 1, max_len do
-            table.insert(diff, { i = i, v = longer[i], t = type })
+            table.insert(diff, { k = i, t = type, v = longer[i] })
         end
     end
 
@@ -166,7 +165,7 @@ function assert_impl.array_equal<T>(a: { [number]: T }, b: { [number]: T }): Fai
 
     local f = make_failure("Arrays were not equal")
     f.complex_info = {
-        type = "ArrayDiff",
+        type = "TableDiff",
         data = diff,
     }
 

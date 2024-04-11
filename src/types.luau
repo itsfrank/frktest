@@ -13,12 +13,10 @@ export type Failure = {
     }?,
 }
 
-export type ArrayDiff<T> = {
-    {
-        i: number,
-        v: T,
-        t: "+" | "-",
-    }
+export type DiffEntry<T> = {
+    k: number,
+    t: "+" | "-" | "~",
+    v: T | { a: T, b: T }, -- latter for t=="~"
 }
 
 export type TestError = {

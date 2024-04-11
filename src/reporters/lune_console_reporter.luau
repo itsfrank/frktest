@@ -8,7 +8,7 @@ local types = require("../types")
 local utils = require("../utils")
 
 type Failure = types.Failure
-type ArrayDiff<T> = types.ArrayDiff<T>
+type DiffEntry<T> = types.DiffEntry<T>
 type TestError = types.TestError
 
 local reporter = {}
@@ -46,21 +46,31 @@ function print_test_info_once()
     end
 end
 
-function make_array_diff_string<T>(diff: ArrayDiff<T>): string
-    local make_line = function<T>(i: number, v: T, t: "+" | "-"): string
-        local color_s: "green" | "red" = if t == "+" then "green" else "red"
-        return color(color_s, `{t} [{i}]: {v}`)
+function make_array_diff_string<T>(diff: { [number]: DiffEntry<T> }): string
+    local make_line = function<T>(i: number, t: "+" | "-" | "~", v: T): string
+        local colors = {
+            ["+"] = "green",
+            ["-"] = "red",
+            ["~"] = "yellow",
+        }
+        local value_s
+        if t == "~" then
+            value_s = `{(v :: any).a} ~= {(v :: any).b}`
+        else
+            value_s = `{v}`
+        end
+        return color(colors[t], `{t} [{i}]: {value_s}`)
     end
     local message = {}
     for _, d in ipairs(diff) do
-        table.insert(message, make_line(d.i, d.v, d.t))
+        table.insert(message, make_line(d.k, d.t, d.v))
     end
     return table.concat(message, "\n")
 end
 
 function handle_complex_info(type: string, data: any): string?
-    if type == "ArrayDiff" then
-        return make_array_diff_string(data :: ArrayDiff<any>)
+    if type == "TableDiff" then
+        return make_array_diff_string(data :: { [number]: DiffEntry<any> })
     end
     return nil
 end
