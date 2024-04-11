@@ -36,12 +36,12 @@ end
 function print_test_info_once()
     if _state.current_suite ~= nil and _state.suite_printed == false then
         _state.suite_printed = true
-        print_indent(`Suite: {color("cyan", _state.current_suite.name)}`, -2)
+        print_indent(`Suite: {color("purple", _state.current_suite.name)}`, -2)
         print("")
     end
     if _state.current_test ~= nil and _state.test_printed == false then
         _state.test_printed = true
-        print_indent(`Test: {color("cyan", _state.current_test.name)}`, -1)
+        print_indent(`Test: {color("purple", _state.current_test.name)}`, -1)
         print("")
     end
 end
