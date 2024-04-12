@@ -144,7 +144,7 @@ end
 
 #### Assertions
 
-Every single assertion has at least one example in the [example](example)
+Every single assertion has at least one example in the [examples](examples)
 folder. If there are any nuances, I added comments.
 
 Really though, they should be self explanatory, your LSP should list them all
