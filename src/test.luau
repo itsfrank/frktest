@@ -77,7 +77,8 @@ end
 -- used to debug the framework itself
 test._hard_errors = false
 
-function test.run_tests()
+-- returns true if all tests succeeded, false otherwise
+function test.run_tests(): boolean
     local tests_ran = 0
     local tests_passed = 0
     local tests_failed = 0
@@ -148,6 +149,8 @@ function test.run_tests()
         passed = tests_passed,
         failed = tests_failed,
     }, _state.listeners.exec_end)
+
+    return tests_failed == 0
 end
 
 function test.on_suite_enter(f: (Suite) -> nil)

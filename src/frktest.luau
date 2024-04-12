@@ -5,9 +5,10 @@ local assert = require("./assert")
 
 -- make sure to initalize a reporter before running, otherwise you will get no output
 -- see `src/reporters` for builtin reporters available
-frktest.run = function()
+-- returns false if any test failed, true otherwise
+frktest.run = function(): boolean
     test.load_suites()
-    test.run_tests()
+    return test.run_tests()
 end
 
 frktest.test = test

@@ -14,7 +14,10 @@ function run_tests()
     local lune_console_reporter = require("@frktest/reporters/lune_console_reporter")
 
     lune_console_reporter.init()
-    frktest.run()
+    local success = frktest.run()
+    if not success then
+        require("@lune/process").exit(1)
+    end
 end
 
 load_tests()
