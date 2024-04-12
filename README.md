@@ -10,7 +10,7 @@ ported to lune
 - Pretty ergonomic to write (I think so)
 - Assertion library, including table & array checks with diff printing, should_error, and a few more!
 - Builtin console reporter with **colors**
-- (undocumented) api to implement custom reporters
+- (undocumented) api to implement custom reporters (see [lune_console_reporter.luau](src/reporters/lune_console_reporter.luau) for sample use)
 
 ### What does it look like tho?
 
