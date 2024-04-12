@@ -91,6 +91,13 @@ function assert_impl.falsy<T>(a: any): Failure?
     return make_failure(`if not {a} - condition failed`)
 end
 
+function assert_impl.not_nil(a: any): Failure?
+    if a ~= nil then
+        return nil
+    end
+    return make_failure("value was nil")
+end
+
 -- error/exception assertions
 
 function assert_impl.should_error<T...>(f: (T...) -> any?): Failure?

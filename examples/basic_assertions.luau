@@ -71,4 +71,11 @@ return function()
             check.falsy(10)
         end)
     end)
+
+    test.suite("Nil checks", function()
+        test.case("not nil", function()
+            local a = nil
+            check.not_nil(a)
+        end)
+    end)
 end

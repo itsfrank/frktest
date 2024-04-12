@@ -123,6 +123,9 @@ assert.require.truthy = make_require(assert_impl.truthy)
 assert.check.falsy = make_check(assert_impl.falsy)
 assert.require.falsy = make_require(assert_impl.falsy)
 
+assert.check.not_nil = make_check(assert_impl.not_nil)
+assert.require.not_nil = make_require(assert_impl.not_nil)
+
 -- error/exception assertions
 assert.check.should_error = make_check(assert_impl.should_error)
 assert.require.should_errors = make_require(assert_impl.should_error)
