@@ -33,5 +33,11 @@ return function()
             local b = { 1, 20, 3, 4, 5, 6, 7 }
             check.array.equal(a, b)
         end)
+
+        test.case("for arrays with tables, you should use check.table.equal", function()
+            local a = { { a = 1 }, { a = 2 } }
+            local b = { { a = 1 }, { a = 2 } }
+            check.array.equal(a, b)
+        end)
     end)
 end
