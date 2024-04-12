@@ -1,7 +1,7 @@
 local frktest = require("@frktest/frktest")
 local test = frktest.test
 local check = frktest.assert.check
-local require = frktest.assert.require
+local req = frktest.assert.require
 local msg = frktest.assert.msg
 
 return function()
@@ -20,7 +20,7 @@ return function()
 
         test.case("Halt early", function()
             local a = nil
-            require.not_nil(a)
+            req.not_nil(a)
             check.falsy(a.b)
         end)
 

@@ -1,7 +1,7 @@
 local frktest = require("@frktest/frktest")
 local test = frktest.test
 local check = frktest.assert.check
-local require = frktest.assert.require
+local req = frktest.assert.require
 
 return function()
     test.suite("Passing", function()
@@ -19,8 +19,8 @@ return function()
 
         test.case("require", function()
             -- requires do halt the test
-            require.equal(1, 100)
-            require.equal(2, 100) -- this will never run
+            req.equal(1, 100)
+            req.equal(2, 100) -- this will never run
         end)
     end)
 

@@ -1,7 +1,7 @@
 local frktest = require("@frktest/frktest")
 local test = frktest.test
 local check = frktest.assert.check
-local require = frktest.assert.require
+local req = frktest.assert.require
 local msg = frktest.assert.msg
 
 return function()
@@ -9,7 +9,7 @@ return function()
         test.case("Print message if assertion fails", function()
             check.equal(10, 20, msg("the check failed and has a message"))
             local exp = 20
-            require.equal(10, exp, msg(`messages can use interpolation: {exp}`))
+            req.equal(10, exp, msg(`messages can use interpolation: {exp}`))
         end)
 
         test.case("Message doesn't have to be in assertion", function()
