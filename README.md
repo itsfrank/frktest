@@ -60,6 +60,8 @@ end
 
 And here is the output (theme is [Rose Pine](https://github.com/rose-pine)):
 
+![image](https://github.com/itsfrank/frktest/assets/7297152/17b4c94f-59ee-48ab-9e6a-1d6bf0ab773a)
+
 #### What's up with the name?
 
 My name is Frank, I often use `frk` as a namespace/prefix for stuff meant for me :)
