@@ -28,11 +28,11 @@ function utils.multiline_to_array(s: string): { string }
 end
 
 function utils.indent_multiline(s: string, i: number): string
-    local res = ""
-    for _, s in ipairs(utils.multiline_to_array(s)) do
-        res ..= utils.make_indent(i) .. s .. "\n"
+    local lines = utils.multiline_to_array(s)
+    for k, s in ipairs(utils.multiline_to_array(s)) do
+        lines[k] = utils.make_indent(i) .. s
     end
-    return res
+    return table.concat(lines, "\n")
 end
 
 return utils
