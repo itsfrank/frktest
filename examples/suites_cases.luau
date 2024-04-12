@@ -15,7 +15,7 @@ return function()
     end)
 
     -- casses don't have to be in a suite
-    -- global tests run befor suited no matter where they are defined
+    -- global tests run before suites no matter where they are defined
     test.case("case in the global suite", function()
         check.is_true(false)
     end)
