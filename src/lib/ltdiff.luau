@@ -1,4 +1,12 @@
 -- adapted from: https://github.com/martinfelis/luatablediff
+--[[
+Changes by @itsfrank:
+    - Make type and cast return value
+    - Change error when function/userdata is found to a warning string and return
+    - Add diff.add to differentate items that exist in A but are nil in B, from modified items
+    - diff.add and diff.del store both keys and values
+]]
+--
 
 --[[
 Copyright © 2012-14 Martin Felis <martin@fysx.org>
@@ -20,15 +28,6 @@ THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
-]]
---
-
---[[
-Changes by @itsfrank:
-    - Make type and cast return value
-    - Change error when function/userdata is found to a warning string and return
-    - Add diff.add to differentate items that exist in A but are nil in B, from modified items
-    - diff.add and diff.del store both keys and values
 ]]
 --
 
