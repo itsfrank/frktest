@@ -7,7 +7,7 @@ ported to lune
 ### Features
 
 - It runs tests
-- Pretty ergonomic to write
+- Pretty ergonomic to write (I think so)
 - Assertion library, including table & array checks with diff printing, should_error, and a few more!
 - Builtin console reporter with **colors**
 - (undocumented) api to implement custom reporters
