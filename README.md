@@ -68,7 +68,7 @@ And here is the output (theme is [Rose Pine](https://github.com/rose-pine)):
 
 **note:** I am not familiar with how any of the current luau package management solutions, so for now, you will have to clone this repo somewhere.
 
-I suggest creating a `require` alias `"@frktest"`, add this yo your `.luaurc`:
+I suggest creating a `require` alias `"@frktest"`, add this to your `.luaurc`:
 
 ```json
 {
