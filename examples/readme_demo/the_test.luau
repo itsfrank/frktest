@@ -1,22 +1,9 @@
-# frktest
+local frktest = require("@frktest/frktest")
+local test = frktest.test
+local check = frktest.assert.check
+local require = frktest.assert.require
+local msg = frktest.assert.msg
 
-A basic unit test framework for [lune](https://github.com/lune-org/lune), will
-probably abandon when [jest-lua](https://github.com/jsdotlua/jest-lua) is
-ported to lune
-
-### Features
-
-- It runs tests
-- Pretty ergonomic to write
-- Assertion library, including table & array checks with diff printing, should_error, and a few more!
-- Builtin console reporter with **colors**
-- (undocumented) api to implement custom reporters
-
-### What does it look like tho?
-
-Here's what a test looks like:
-
-```lua
 return function()
     test.suite("A collection of tests", function()
         test.case("A test that passes", function()
@@ -56,10 +43,3 @@ return function()
         end)
     end)
 end
-```
-
-And here is the output (theme is [Rose Pine](https://github.com/rose-pine)):
-
-#### What's up with the name?
-
-My name is Frank, I often use `frk` as a namespace/prefix for stuff meant for me :)
