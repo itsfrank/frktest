@@ -6,9 +6,11 @@
 local stdio = require("@lune/stdio")
 local types = require("../types")
 local utils = require("../utils")
+local inspect = require("../lib/inspect")
 
 type Failure = types.Failure
 type DiffEntry<T> = types.DiffEntry<T>
+type TableDiff = types.TableDiff
 type TestError = types.TestError
 
 local reporter = {}
@@ -47,30 +49,66 @@ function print_test_info_once()
 end
 
 function make_array_diff_string<T>(diff: { [number]: DiffEntry<T> }): string
-    local make_line = function<T>(i: number, t: "+" | "-" | "~", v: T): string
+    local make_line = function<T>(e: DiffEntry<T>): string
         local colors = {
             ["+"] = "green",
             ["-"] = "red",
             ["~"] = "yellow",
         }
         local value_s
-        if t == "~" then
-            value_s = `{(v :: any).a} ~= {(v :: any).b}`
+        if e.t == "~" then
+            value_s = `{(e.v :: any).a} == {(e.v :: any).b}`
         else
-            value_s = `{v}`
+            value_s = `{e.v}`
         end
-        return color(colors[t], `{t} [{i}]: {value_s}`)
+        return color(colors[e.t], `{e.t} [{e.k}]: {value_s}`)
     end
     local message = {}
     for _, d in ipairs(diff) do
-        table.insert(message, make_line(d.k, d.t, d.v))
+        table.insert(message, make_line(d))
     end
     return table.concat(message, "\n")
 end
 
+function make_table_diff_string(diff: TableDiff): string
+    local make_line = function<T>(i: number, e: DiffEntry<any>): string
+        local colors = {
+            ["+"] = "green",
+            ["-"] = "red",
+            ["~"] = "yellow",
+        }
+        local value_s = ""
+        local inspect_opts = { newline = "", indent = "" }
+        if e.t == "~" then
+            value_s = `{inspect((e.v :: any).a, inspect_opts)} == {inspect((e.v :: any).b, inspect_opts)}`
+        else
+            value_s = inspect(e.v, inspect_opts)
+        end
+        return color(colors[e.t], `{utils.make_indent(i)}{e.t} [{e.k}]: {value_s}`)
+    end
+    local message = {}
+
+    local function add_to_diff_message(diff: TableDiff, i: number)
+        for _, v in ipairs(diff.diff) do
+            table.insert(message, make_line(i, v))
+        end
+        if diff.sub ~= nil then
+            for k, v in pairs(diff.sub) do
+                table.insert(message, `{utils.make_indent(i)}  [{k}]:`)
+                add_to_diff_message(v, i + 1)
+            end
+        end
+    end
+    add_to_diff_message(diff, 0)
+
+    return table.concat(message, "\n")
+end
+
 function handle_complex_info(type: string, data: any): string?
-    if type == "TableDiff" then
+    if type == "ArrayDiff" then
         return make_array_diff_string(data :: { [number]: DiffEntry<any> })
+    elseif type == "TableDiff" then
+        return make_table_diff_string(data :: TableDiff)
     end
     return nil
 end

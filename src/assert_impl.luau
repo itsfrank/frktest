@@ -3,6 +3,7 @@ local utils = require("./utils")
 
 type Failure = types.Failure
 type DiffEntry<T> = types.DiffEntry<T>
+type TableDiff = types.TableDiff
 
 local assert_impl = {}
 
@@ -165,7 +166,7 @@ function assert_impl.array_equal<T>(a: { [number]: T }, b: { [number]: T }): Fai
 
     local f = make_failure("Arrays were not equal")
     f.complex_info = {
-        type = "TableDiff",
+        type = "ArrayDiff",
         data = diff,
     }
 
@@ -191,6 +192,63 @@ function assert_impl.table_contains(t: { [any]: any }, keys: any | { [number]: a
     end
 
     return make_failure(`missing keys: {table.concat(missing, ", ")}`)
+end
+
+local ltdiff = require("./lib/ltdiff")
+function assert_impl.table_equal(a: { [any]: any }, b: { [any]: any }): Failure?
+    -- convert ltdiff into our diff format
+    local function ltdiff_to_frkdiff(lt_diff: ltdiff.Diff): (boolean, TableDiff)
+        local has_diff = false
+        local frk_diff: TableDiff = { diff = {} }
+
+        if lt_diff.add ~= nil then
+            has_diff = true
+            for _, v in ipairs(lt_diff.add) do
+                table.insert(frk_diff.diff, { k = v.k, t = "-", v = v.v })
+            end
+        end
+
+        if lt_diff.del ~= nil then
+            has_diff = true
+            for _, v in ipairs(lt_diff.del) do
+                table.insert(frk_diff.diff, { k = v.k, t = "+", v = v.v })
+            end
+        end
+
+        if lt_diff.mod ~= nil then
+            has_diff = true
+            for k, v in pairs(lt_diff.mod) do
+                table.insert(frk_diff.diff, { k = k, t = "~", v = { a = v.a, b = v.b } })
+            end
+        end
+
+        if lt_diff.sub ~= nil then
+            has_diff = true
+            frk_diff.sub = {}
+            for k, v in pairs(lt_diff.sub) do
+                assert(frk_diff.sub)
+                local sub_has_diff
+                sub_has_diff, frk_diff.sub[k] = ltdiff_to_frkdiff(v)
+                has_diff = has_diff or sub_has_diff
+            end
+        end
+
+        return has_diff, frk_diff
+    end
+    local lt_diff, _warning = ltdiff.diff(a, b)
+
+    local has_diff, diff = ltdiff_to_frkdiff(lt_diff)
+    if not has_diff then
+        return nil
+    end
+
+    local f = make_failure("Tables were not equal")
+    f.complex_info = {
+        type = "TableDiff",
+        data = diff,
+    }
+
+    return f
 end
 
 return assert_impl

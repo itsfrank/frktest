@@ -141,4 +141,7 @@ assert.require.array.equal = make_require(assert_impl.array_equal)
 assert.check.table.contains = make_check(assert_impl.table_contains)
 assert.require.table.contains = make_require(assert_impl.table_contains)
 
+assert.check.table.equal = make_check(assert_impl.table_equal)
+assert.require.table.equal = make_require(assert_impl.table_equal)
+
 return assert

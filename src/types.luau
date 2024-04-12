@@ -14,9 +14,14 @@ export type Failure = {
 }
 
 export type DiffEntry<T> = {
-    k: number,
+    k: any,
     t: "+" | "-" | "~",
     v: T | { a: T, b: T }, -- latter for t=="~"
+}
+
+export type TableDiff = {
+    diff: { [number]: DiffEntry<any> },
+    sub: { [any]: TableDiff }?,
 }
 
 export type TestError = {

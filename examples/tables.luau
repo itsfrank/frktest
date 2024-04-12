@@ -17,5 +17,29 @@ return function()
             check.table.contains(a, "d") -- check for one key
             check.table.contains(a, { "b", "c", "d", "e" }) -- check for multiple keys
         end)
+
+        test.case("table equal modified", function()
+            local a = { a = 1, b = 2 }
+            local b = { a = 1, b = 20 }
+            check.table.equal(a, b)
+        end)
+
+        test.case("table equal added", function()
+            local a = { a = 1, b = 2 }
+            local b = { a = 1 }
+            check.table.equal(a, b)
+        end)
+
+        test.case("table equal missing", function()
+            local a = { a = 1 }
+            local b = { a = 1, b = 2 }
+            check.table.equal(a, b)
+        end)
+
+        test.case("arrays of tables fit here", function()
+            local a = { { a = 1 }, { a = 3 } }
+            local b = { { a = 1 }, { a = 22 }, { a = 3 } }
+            check.table.equal(a, b)
+        end)
     end)
 end
