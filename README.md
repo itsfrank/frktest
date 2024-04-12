@@ -60,7 +60,7 @@ end
 
 And here is the output (theme is [Rose Pine](https://github.com/rose-pine)):
 
-![image](https://github.com/itsfrank/frktest/assets/7297152/17b4c94f-59ee-48ab-9e6a-1d6bf0ab773a)
+![image](https://github.com/itsfrank/frktest/assets/7297152/d7a34cb4-4a24-4d31-b2e5-b4cf98e89180)
 
 #### What's up with the name?
 
