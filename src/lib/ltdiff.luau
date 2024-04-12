@@ -23,16 +23,33 @@ DEALINGS IN THE SOFTWARE.
 ]]
 --
 
+--[[
+Changes by @itsfrank:
+    - Make type and cast return value
+    - Change error when function/userdata is found to a warning string and return
+    - Add diff.add to differentate items that exist in A but are nil in B, from modified items
+    - diff.add and diff.del store both keys and values
+]]
+--
+
 -- require 'strict'
 
+export type Diff = {
+    del: { [number]: { k: any, v: any } }?,
+    add: { [number]: { k: any, v: any } }?,
+    mod: { [any]: { a: any, b: any } }?,
+    sub: Diff?,
+}
 local ltdiff = {}
 
-local function table_diff(A: any, B: any)
-    local diff: any = { del = {}, mod = {}, sub = {} }
+local function table_diff(A: any, B: any): (Diff, string?)
+    local warning = nil
+    local diff: any = { del = {}, add = {}, mod = {}, sub = {} }
 
     for k, v in pairs(A) do
         if type(A[k]) == "function" or type(A[k]) == "userdata" then
-            error("table_diff only supports diffs of tables!")
+            warning = "`function` and `userdata` types are skipped"
+            continue
         elseif B[k] ~= nil and type(A[k]) == "table" and type(B[k]) == "table" then
             diff.sub[k] = table_diff(A[k], B[k])
 
@@ -40,15 +57,16 @@ local function table_diff(A: any, B: any)
                 diff.sub[k] = nil
             end
         elseif B[k] == nil then
-            diff.del[#diff.del + 1] = k
+            diff.del[#diff.del + 1] = { k = k, v = A[k] }
         elseif B[k] ~= v then
-            diff.mod[k] = B[k]
+            diff.mod[k] = { a = A[k], b = B[k] }
         end
     end
 
     for k, v in pairs(B) do
         if type(B[k]) == "function" or type(B[k]) == "userdata" then
-            error("table_diff only supports diffs of tables!")
+            warning = "`function` and `userdata` types are skipped"
+            continue
         elseif diff.sub[k] ~= nil then
             -- skip
         elseif A[k] ~= nil and type(A[k]) == "table" and type(B[k]) == "table" then
@@ -57,13 +75,19 @@ local function table_diff(A: any, B: any)
             if next(diff.sub[k]) == nil then
                 diff.sub[k] = nil
             end
+        elseif B[k] ~= nil and A[k] == nil then
+            diff.add[#diff.add + 1] = { k = k, v = B[k] }
         elseif B[k] ~= A[k] then
-            diff.mod[k] = v
+            diff.mod[k] = { a = A[k], b = B[k] }
         end
     end
 
     if next(diff.sub) == nil then
         diff.sub = nil
+    end
+
+    if next(diff.add) == nil then
+        diff.add = nil
     end
 
     if next(diff.mod) == nil then
@@ -74,7 +98,7 @@ local function table_diff(A: any, B: any)
         diff.del = nil
     end
 
-    return diff
+    return diff, warning
 end
 
 ltdiff.diff = table_diff
