@@ -1,8 +1,6 @@
 # frktest
 
-A basic unit test framework for [lune](https://github.com/lune-org/lune), will
-probably abandon when [jest-lua](https://github.com/jsdotlua/jest-lua) is
-ported to lune
+A basic unit test framework for [lune](https://github.com/lune-org/lune). I developed this mostly for myself, if the project garners interest I will consider renaming it. Otherwise, I plan to use it for my projects until the community consolidates around an alternative (like [jest-lua](https://github.com/jsdotlua/jest-lua) when it gets ported to lune)
 
 ### Features
 
