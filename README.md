@@ -152,6 +152,13 @@ out if you type `assert.check.|`
 
 ### End stuff
 
+#### TODO
+
+- Write tests to test the framework (ironic...)
+- Encapsulate test state so that I can test the framework using the framework (with 2 separate states, one doing the testing, and one being tested)
+- Probably add more assertions
+- Fix bugs people might report
+
 #### Acknowledgements
 
 - [martinfelis/luatablediff](https://github.com/martinfelis/luatablediff) for a great table diff inplementation that I adapted for the `table.equal` assertions
