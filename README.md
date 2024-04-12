@@ -72,7 +72,6 @@ I suggest creating a `require` alias `"@frktest"`, add this yo your `.luaurc`:
 
 ```json
 {
-  ...
   "aliases": {
     "frktest": "<path to frktest/src>",
   }
@@ -98,7 +97,7 @@ The framework does not have a cli or test discovery. So you need to make an entr
 -- require test files and call the returned function
 require("./some_test")()
 
--- initialize a reporter (ther eis currently only one... this one)
+-- initialize a reporter (there is currently only one... this one)
 local lune_console_reporter = require("@frktest/reporters/lune_console_reporter")
 lune_console_reporter.init()
 
@@ -145,11 +144,11 @@ end
 
 #### Assertions
 
-Every single assertion has at least one examples in the [example](example)
-folder. If ther eare any nuances, I added comments.
+Every single assertion has at least one example in the [example](example)
+folder. If there are any nuances, I added comments.
 
 Really though, they should be self explanatory, your LSP should list them all
-out if you type `assert.check.`
+out if you type `assert.check.|`
 
 ### End stuff
 
