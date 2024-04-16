@@ -3,10 +3,9 @@ name = "itsfrank/frktest"
 description = "Simple testing framework"
 version = "0.0.1"
 license = "MIT"
-registry = "https://github.com/UpliftGames/wally-index"
-realm = "shared"
 authors = ["Francis O'Brien <github.com/itsfrank>"]
 registry = "https://github.com/upliftgames/wally-index"
+realm = "shared"
 # not really relevant here since this is intended for lune...
 realm = "shared"
 
