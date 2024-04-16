@@ -64,13 +64,18 @@ And here is the output (theme is [Rose Pine](https://github.com/rose-pine)):
 
 #### Set up your environment
 
-**note:** I am not familiar with how any of the current luau package management solutions, so for now, you will have to clone this repo somewhere.
+**note:** For the most up-to-date version it is best to clone the repo somewhere, however it is available on [wally](https://github.com/UpliftGames/wally):
+```toml
+# see releases for latest version
+frktest = "itsfrank/frktest@<version>"
+```
 
 I suggest creating a `require` alias `"@frktest"`, add this to your `.luaurc`:
 
-```json
+```jsonc
 {
   "aliases": {
+    // using wally, the path is "DevPackages/_Index/itsfrank_frktest@0.0.1/frktest/src"
     "frktest": "<path to frktest/src>",
   }
 }
