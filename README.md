@@ -64,19 +64,85 @@ And here is the output (theme is [Rose Pine](https://github.com/rose-pine)):
 
 #### Set up your environment
 
-**note:** For the most up-to-date version it is best to clone the repo somewhere, however it is available on [wally](https://github.com/UpliftGames/wally):
+**Installing**
+
+frktest is available on [wally](https://wally.run/), [pesde](https://docs.pesde.daimond113.com/), or you can just clone the repo.
+
+<details>
+
+<summary>using wally</summary>
+
+Add the dependency:
+
+in `wally.toml`:
+
 ```toml
-# see releases for latest version
-frktest = "itsfrank/frktest@<version>"
+[dev-dependencies]
+frktest = "itsfrank/frktest@0.0.1"
 ```
 
-I suggest creating a `require` alias `"@frktest"`, add this to your `.luaurc`:
+Create aslias in `.luaurc`:
 
 ```jsonc
 {
   "aliases": {
-    // using wally, the path is "DevPackages/_Index/itsfrank_frktest@0.0.1/frktest/src"
+    "frktest": "DevPackages/_Index/itsfrank_frktest@0.0.1/frktest/src",
+  }
+}
+```
+
+</details>
+
+<details>
+
+<summary>using pesde</summary>
+
+in `pesde.toml`:
+
+```toml
+[dev_dependencies]
+frktest = { name = "itsfrank/frktest", version = "^0.0.1" }
+```
+
+Create aslias in `.luaurc`:
+
+```jsonc
+{
+  "aliases": {
+    "frktest": "lune_packages/.pesde/itsfrank+frktest/0.0.1/frktest/src/"
+  }
+}
+```
+
+</details>
+
+<details>
+
+<summary>clone the repo</summary>
+
+```shell
+# somewhere on your machine
+git clone https://github.com/itsfrank/frktest.git
+```
+
+Create aslias in `.luaurc`:
+
+```jsonc
+{
+  "aliases": {
     "frktest": "<path to frktest/src>",
+  }
+}
+```
+
+</details>
+
+All example assume you created a `require` alias `"@frktest"` in your project's `.luaurc`:
+
+```jsonc
+{
+  "aliases": {
+    "frktest": "<see install sections above for paths>",
   }
 }
 ```
@@ -86,7 +152,7 @@ I suggest creating a `require` alias `"@frktest"`, add this to your `.luaurc`:
 ```json
 "luau-lsp.require.mode": "relativeToFile",
 "luau-lsp.require.directoryAliases": {
-    "@frktest/": "<path to frktest/src>"
+    "@frktest/": "<alias in luaurc>"
 }
 ```
 
@@ -100,7 +166,7 @@ The framework does not have a cli or test discovery. So you need to make an entr
 -- require test files and call the returned function
 require("./some_test")()
 
--- initialize a reporter (there is currently only one... this one)
+-- initialize a reporter (there is currently only one... this one, but you can make your own!)
 local lune_console_reporter = require("@frktest/reporters/lune_console_reporter")
 lune_console_reporter.init()
 
