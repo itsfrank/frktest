@@ -81,7 +81,7 @@ in `wally.toml`:
 frktest = "itsfrank/frktest@0.0.1"
 ```
 
-Create aslias in `.luaurc`:
+Create alias in `.luaurc`:
 
 ```jsonc
 {
@@ -104,7 +104,7 @@ in `pesde.toml`:
 frktest = { name = "itsfrank/frktest", version = "^0.0.1" }
 ```
 
-Create aslias in `.luaurc`:
+Create alias in `.luaurc`:
 
 ```jsonc
 {
@@ -112,6 +112,17 @@ Create aslias in `.luaurc`:
     "frktest": "lune_packages/.pesde/itsfrank+frktest/0.0.1/frktest/src/"
   }
 }
+```
+
+**Note**: If you want to use the generated luau file in `./lune_packages`, in
+the examples, replace `require("@frktest/frktest")` with
+`require("./lune_packages/frktest")`. Reporters will be avilable in the
+`_reporters` member:
+
+```luau
+-- from project root
+local frktest = require("./lune_packages/frktest")
+local lune_console_reporter = frktest._reporters.lune_console_reporter
 ```
 
 </details>
@@ -125,7 +136,7 @@ Create aslias in `.luaurc`:
 git clone https://github.com/itsfrank/frktest.git
 ```
 
-Create aslias in `.luaurc`:
+Create alias in `.luaurc`:
 
 ```jsonc
 {
