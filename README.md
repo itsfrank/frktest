@@ -142,6 +142,8 @@ local frktest = require("./lune_packages/frktest")
 local lune_console_reporter = frktest._reporters.lune_console_reporter
 ```
 
+A sample pesde project using frktest can be found here: https://github.com/itsfrank/frktest-pesde-sample
+
 </details>
 
 <details>
