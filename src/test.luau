@@ -25,6 +25,7 @@ _state.listeners.suite_enter = {} :: { (Suite) -> nil }
 _state.listeners.suite_leave = {} :: { (Suite) -> nil }
 _state.listeners.test_enter = {} :: { (Test) -> nil }
 _state.listeners.test_leave = {} :: { (Test) -> nil }
+_state.listeners.test_skipped = {} :: { (Test) -> nil }
 _state.listeners.exec_begin = {} :: { (ExecCounts) -> nil }
 _state.listeners.exec_end = {} :: { (ExecResult) -> nil }
 _state.listeners.test_error = {} :: { (TestError) -> nil }
@@ -44,6 +45,7 @@ function test.suite(name: string, fn: () -> nil)
         name = name,
         fn = fn,
         tests = {},
+        skip = false,
     })
 end
 
@@ -52,6 +54,7 @@ function test.case(name: string, fn: () -> nil)
     table.insert(suite_tests, {
         name = name,
         fn = fn,
+        skip = false,
         failed = false,
     })
 end
@@ -76,6 +79,20 @@ function test.focus.suite(name: string, fn: () -> nil)
 
     test.suite(name, fn)
     _state.focus_suite = _state.suites[#_state.suites]
+end
+
+-- to skip suites/cases
+test.skip = {}
+function test.skip.case(name: string, fn: () -> nil)
+    test.case(name, fn)
+
+    local suite_tests = get_current_load_suite_tests()
+    suite_tests[#suite_tests].skip = true
+end
+
+function test.skip.suite(name: string, fn: () -> nil)
+    test.suite(name, fn)
+    _state.suites[#_state.suites].skip = true
 end
 
 function test.load_suites()
@@ -111,6 +128,7 @@ function test.run_tests(): boolean
     local tests_ran = 0
     local tests_passed = 0
     local tests_failed = 0
+    local tests_skipped = 0
 
     if _state.focus_suite ~= nil and _state.focus_test ~= nil then
         warn(
@@ -118,7 +136,13 @@ function test.run_tests(): boolean
         )
     end
 
-    local run_test = function(t: Test)
+    local run_test = function(t: Test, suite_skip: boolean?)
+        if t.skip or suite_skip == true then
+            tests_skipped += 1
+            exec_listeners(t, _state.listeners.test_skipped)
+            return
+        end
+
         t.failed = false
         _state.current_exec_test = t
         exec_listeners(t, _state.listeners.test_enter)
@@ -164,7 +188,7 @@ function test.run_tests(): boolean
         _state.current_exec_suite = s
         exec_listeners(s, _state.listeners.suite_enter)
         for _, t in ipairs(s.tests) do
-            run_test(t)
+            run_test(t, s.skip)
         end
         exec_listeners(s, _state.listeners.suite_leave)
         _state.current_exec_suite = nil
@@ -193,6 +217,7 @@ function test.run_tests(): boolean
         ran = tests_ran,
         passed = tests_passed,
         failed = tests_failed,
+        skipped = tests_skipped,
     }, _state.listeners.exec_end)
 
     return tests_failed == 0
@@ -212,6 +237,10 @@ end
 
 function test.on_test_leave(f: (Test) -> nil)
     table.insert(_state.listeners.test_leave, f)
+end
+
+function test.on_test_skipped(f: (Test) -> nil)
+    table.insert(_state.listeners.test_skipped, f)
 end
 
 function test.on_exec_begin(f: (ExecCounts) -> nil)

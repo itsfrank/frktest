@@ -144,7 +144,7 @@ function reporter.print_counts(tests: number, suites: number)
     print("")
 end
 
-function reporter.print_summary(ran: number, passed: number, failed: number)
+function reporter.print_summary(ran: number, passed: number, failed: number, skipped: number)
     print("--------------------")
     local summary = `Tests Ran: {ran}`
     if passed > 0 then
@@ -152,6 +152,9 @@ function reporter.print_summary(ran: number, passed: number, failed: number)
     end
     if failed > 0 then
         summary = summary .. " | " .. color("red", `Failed: {failed}`)
+    end
+    if skipped > 0 then
+        summary = summary .. " | " .. color("yellow", `Skipped: {skipped}`)
     end
     print(summary)
     local status = if failed == 0 then color("green", "OK") else color("red", "FAIL")
@@ -185,7 +188,7 @@ function reporter.init()
         reporter.print_counts(c.tests, c.suites)
     end)
     test.on_exec_end(function(r)
-        reporter.print_summary(r.ran, r.passed, r.failed)
+        reporter.print_summary(r.ran, r.passed, r.failed, r.skipped)
     end)
 
     test.on_test_error(function(e)

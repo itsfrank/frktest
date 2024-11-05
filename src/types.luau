@@ -31,8 +31,11 @@ export type TestError = {
 }
 
 export type Test = {
+    -- config state
     name: string,
     fn: () -> nil,
+    skip: boolean,
+    -- result state
     failed: boolean,
 }
 
@@ -40,6 +43,7 @@ export type Suite = {
     name: string,
     fn: () -> nil,
     tests: { Test },
+    skip: boolean,
 }
 
 export type ExecCounts = {
@@ -51,6 +55,7 @@ export type ExecResult = {
     ran: number,
     passed: number,
     failed: number,
+    skipped: number,
 }
 
 return {}

@@ -57,6 +57,10 @@ return function()
     -- you can use test.focus to temporarily focus on a test case/suite:
     test.focus.suite("only this suite will run", function() end)
     test.focus.case("only this case will run", function() end) 
+
+    -- you can use test.skip to skip test cases/suites:
+    test.skip.suite("all tests in this suite will be skipped", function() end)
+    test.skip.case("this test will be skipped", function() end) 
 end
 ```
 

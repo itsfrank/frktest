@@ -7,6 +7,7 @@ function load_tests()
     require("./parametrized")()
     require("./arrays")()
     require("./tables")()
+    require("./skip")()
     -- require("./focus")() -- this file contains test.focus definitions, uncomment and only these definitions will run
 end
 
