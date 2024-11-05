@@ -95,7 +95,7 @@ in `wally.toml`:
 
 ```toml
 [dev-dependencies]
-frktest = "itsfrank/frktest@0.0.1"
+frktest = "itsfrank/frktest@0.0.2"
 ```
 
 Create alias in `.luaurc`:
@@ -103,7 +103,7 @@ Create alias in `.luaurc`:
 ```jsonc
 {
   "aliases": {
-    "frktest": "DevPackages/_Index/itsfrank_frktest@0.0.1/frktest/src",
+    "frktest": "DevPackages/_Index/itsfrank_frktest@0.0.2/frktest/src",
   }
 }
 ```
@@ -118,7 +118,7 @@ in `pesde.toml`:
 
 ```toml
 [dev_dependencies]
-frktest = { name = "itsfrank/frktest", version = "^0.0.1" }
+frktest = { name = "itsfrank/frktest", version = "^0.0.2" }
 ```
 
 Create alias in `.luaurc`:
@@ -126,7 +126,7 @@ Create alias in `.luaurc`:
 ```jsonc
 {
   "aliases": {
-    "frktest": "lune_packages/.pesde/itsfrank+frktest/0.0.1/frktest/src/"
+    "frktest": "lune_packages/.pesde/itsfrank+frktest/0.0.2/frktest/src/"
   }
 }
 ```
