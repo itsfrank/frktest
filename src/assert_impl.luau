@@ -182,7 +182,12 @@ end
 
 -- table assertions
 
-function assert_impl.table_contains(t: { [any]: any }, keys: any | { [number]: any }): Failure?
+function assert_impl.table_contains(t: any, keys: any | { [number]: any }): Failure?
+    -- ensure input is a tables
+    if typeof(t) ~= "table" then
+        return make_failure(`type of arg 1 is {typeof(t)}, expected a table`)
+    end
+
     if type(keys) ~= "table" then
         keys = { keys }
     end
@@ -202,7 +207,15 @@ function assert_impl.table_contains(t: { [any]: any }, keys: any | { [number]: a
 end
 
 local ltdiff = require("./lib/ltdiff")
-function assert_impl.table_equal(a: { [any]: any }, b: { [any]: any }): Failure?
+function assert_impl.table_equal(a: any, b: any): Failure?
+    -- ensure inputs are tables
+    if typeof(a) ~= "table" then
+        return make_failure(`type of arg 1 is {typeof(a)}, expected a table`)
+    end
+    if typeof(b) ~= "table" then
+        return make_failure(`type of arg 2 is {typeof(b)}, expected a table`)
+    end
+
     -- convert ltdiff into our diff format
     local function ltdiff_to_frkdiff(lt_diff: ltdiff.Diff): (boolean, TableDiff)
         local has_diff = false

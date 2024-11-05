@@ -42,6 +42,16 @@ return function()
             check.table.equal(a, b)
         end)
 
+        test.case("table-ness is checked at runtime", function()
+            local not_table = "str"
+            local a = { a = 1, b = 2 }
+
+            -- passing non-tables will fail the assertion with helpful message
+            check.table.contains(not_table, "a")
+            check.table.equal(a, not_table)
+            check.table.equal(not_table, a)
+        end)
+
         test.case("metatables aren't considered", function()
             -- these 2 tables are equal, even though their MTs are different
             local a = setmetatable({ a = 10 }, { foo = function() end, b = 10 })
