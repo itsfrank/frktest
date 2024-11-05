@@ -41,5 +41,12 @@ return function()
             local b = { { a = 1 }, { a = 22 }, { a = 3 } }
             check.table.equal(a, b)
         end)
+
+        test.case("metatables aren't considered", function()
+            -- these 2 tables are equal, even though their MTs are different
+            local a = setmetatable({ a = 10 }, { foo = function() end, b = 10 })
+            local b = setmetatable({ a = 10 }, { bar = function() end, b = 20 })
+            check.table.equal(a, b)
+        end)
     end)
 end
