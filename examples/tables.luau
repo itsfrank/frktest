@@ -41,5 +41,15 @@ return function()
             local b = { { a = 1 }, { a = 22 }, { a = 3 } }
             check.table.equal(a, b)
         end)
+
+        test.case("table-ness is checked at runtime", function()
+            local not_table = "str"
+            local a = { a = 1, b = 2 }
+
+            -- passing non-tables will fail the asserting with helpful message
+            check.table.contains(not_table, "a")
+            check.table.equal(a, not_table)
+            check.table.equal(not_table, a)
+        end)
     end)
 end
