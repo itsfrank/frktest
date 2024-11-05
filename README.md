@@ -54,9 +54,9 @@ return function()
         end)
     end)
 
-    -- you can use test.only to temporarily focus on a test case/suite:
-    test.only.suite("only this suite will run", function() end)
-    test.only.case("only this case will run", function() end)
+    -- you can use test.focus to temporarily focus on a test case/suite:
+    test.focus.suite("only this suite will run", function() end)
+    test.focus.case("only this case will run", function() end) 
 end
 ```
 

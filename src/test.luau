@@ -17,8 +17,8 @@ _state.current_load_suite = nil :: Suite?
 _state.current_exec_suite = nil :: Suite?
 _state.current_exec_test = nil :: Test?
 
-_state.only_suite = nil :: Suite?
-_state.only_test = nil :: Test?
+_state.focus_suite = nil :: Suite?
+_state.focus_test = nil :: Test?
 
 _state.listeners = {}
 _state.listeners.suite_enter = {} :: { (Suite) -> nil }
@@ -57,25 +57,28 @@ function test.case(name: string, fn: () -> nil)
 end
 
 -- to focus on one suite/case
-test.only = {}
-function test.only.case(name: string, fn: () -> nil)
-    if _state.only_test ~= nil then
-        error(`only.test called more than once, current only test: '{_state.only_test.name}'`)
+test.focus = {}
+function test.focus.case(name: string, fn: () -> nil)
+    if _state.focus_test ~= nil then
+        error(`focus.test called more than once, current focus test: '{_state.focus_test.name}'`)
     end
 
     test.case(name, fn)
 
     local suite_tests = get_current_load_suite_tests()
-    _state.only_test = suite_tests[#suite_tests]
+    _state.focus_test = suite_tests[#suite_tests]
 end
+-- to skip on one suites/cases
+test.skip = {}
 
-function test.only.suite(name: string, fn: () -> nil)
-    if _state.only_suite ~= nil then
-        error(`only.suite called more than once, current only suite: '{_state.only_suite.name}'`)
+
+function test.focus.suite(name: string, fn: () -> nil)
+    if _state.focus_suite ~= nil then
+        error(`focus.suite called more than once, current focus suite: '{_state.focus_suite.name}'`)
     end
 
     test.suite(name, fn)
-    _state.only_suite = _state.suites[#_state.suites]
+    _state.focus_suite = _state.suites[#_state.suites]
 end
 
 function test.load_suites()
@@ -112,9 +115,9 @@ function test.run_tests(): boolean
     local tests_passed = 0
     local tests_failed = 0
 
-    if _state.only_suite ~= nil and _state.only_test ~= nil then
+    if _state.focus_suite ~= nil and _state.focus_test ~= nil then
         warn(
-            `both only.case, and only.suite have been set, the case will be run exclusively, other tests in suite '{_state.only_suite.name}' will be skipped\n`
+            `both focus.case, and focus.suite have been set, the case will be run exclusively, other tests in suite '{_state.focus_suite.name}' will be skipped\n`
         )
     end
 
@@ -175,10 +178,10 @@ function test.run_tests(): boolean
         suites = #_state.suites,
     }, _state.listeners.exec_begin)
 
-    if _state.only_test ~= nil then
-        run_test(_state.only_test)
-    elseif _state.only_suite ~= nil then
-        run_suite(_state.only_suite)
+    if _state.focus_test ~= nil then
+        run_test(_state.focus_test)
+    elseif _state.focus_suite ~= nil then
+        run_suite(_state.focus_suite)
     else
         for _, t in ipairs(_state.global_suite) do
             run_test(t)

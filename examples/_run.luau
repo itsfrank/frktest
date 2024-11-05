@@ -7,7 +7,7 @@ function load_tests()
     require("./parametrized")()
     require("./arrays")()
     require("./tables")()
-    -- require("./only")() -- this file contains test.only definitions, uncomment and only these definitions will run
+    -- require("./focus")() -- this file contains test.focus definitions, uncomment and only these definitions will run
 end
 
 function run_tests()
