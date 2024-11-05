@@ -68,9 +68,6 @@ function test.focus.case(name: string, fn: () -> nil)
     local suite_tests = get_current_load_suite_tests()
     _state.focus_test = suite_tests[#suite_tests]
 end
--- to skip on one suites/cases
-test.skip = {}
-
 
 function test.focus.suite(name: string, fn: () -> nil)
     if _state.focus_suite ~= nil then
