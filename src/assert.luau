@@ -19,6 +19,11 @@ end
 
 function make_assert<T...>(impl: (T...) -> Failure?): (T...) -> Failure?
     return function(...)
+        local current_test = test.current_test()
+        if current_test == nil then
+            error("current test is nil, is the assertion called outside of a test function?")
+        end
+
         local f = impl(...)
         if f == nil then
             _state.current_user_msg = nil
@@ -30,11 +35,7 @@ function make_assert<T...>(impl: (T...) -> Failure?): (T...) -> Failure?
             f.user_msg = _state.current_user_msg
         end
 
-        local current_test = test.current_test()
-        if current_test ~= nil then
-            current_test.failed = true
-        end
-
+        current_test.failed = true
         _state.current_user_msg = nil
         return f
     end
