@@ -46,7 +46,7 @@ return function()
             local not_table = "str"
             local a = { a = 1, b = 2 }
 
-            -- passing non-tables will fail the asserting with helpful message
+            -- passing non-tables will fail the assertion with helpful message
             check.table.contains(not_table, "a")
             check.table.equal(a, not_table)
             check.table.equal(not_table, a)
