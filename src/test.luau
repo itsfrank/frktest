@@ -17,6 +17,9 @@ _state.current_load_suite = nil :: Suite?
 _state.current_exec_suite = nil :: Suite?
 _state.current_exec_test = nil :: Test?
 
+_state.only_suite = nil :: Suite?
+_state.only_test = nil :: Test?
+
 _state.listeners = {}
 _state.listeners.suite_enter = {} :: { (Suite) -> nil }
 _state.listeners.suite_leave = {} :: { (Suite) -> nil }
@@ -28,6 +31,14 @@ _state.listeners.test_error = {} :: { (TestError) -> nil }
 
 _state = require("./state").get_state("test", _state)
 
+function get_current_load_suite_tests(): { Test }
+    local suite_test = _state.global_suite
+    if _state.current_load_suite ~= nil then
+        suite_test = _state.current_load_suite.tests
+    end
+    return suite_test
+end
+
 function test.suite(name: string, fn: () -> nil)
     table.insert(_state.suites, {
         name = name,
@@ -37,16 +48,34 @@ function test.suite(name: string, fn: () -> nil)
 end
 
 function test.case(name: string, fn: () -> nil)
-    local suite_tests = _state.global_suite
-    if _state.current_load_suite ~= nil then
-        suite_tests = _state.current_load_suite.tests
-    end
-
+    local suite_tests = get_current_load_suite_tests()
     table.insert(suite_tests, {
         name = name,
         fn = fn,
         failed = false,
     })
+end
+
+-- to focus on one suite/case
+test.only = {}
+function test.only.case(name: string, fn: () -> nil)
+    if _state.only_test ~= nil then
+        error(`only.test called more than once, current only test: '{_state.only_test.name}'`)
+    end
+
+    test.case(name, fn)
+
+    local suite_tests = get_current_load_suite_tests()
+    _state.only_test = suite_tests[#suite_tests]
+end
+
+function test.only.suite(name: string, fn: () -> nil)
+    if _state.only_suite ~= nil then
+        error(`only.suite called more than once, current only suite: '{_state.only_suite.name}'`)
+    end
+
+    test.suite(name, fn)
+    _state.only_suite = _state.suites[#_state.suites]
 end
 
 function test.load_suites()
@@ -82,6 +111,12 @@ function test.run_tests(): boolean
     local tests_ran = 0
     local tests_passed = 0
     local tests_failed = 0
+
+    if _state.only_suite ~= nil and _state.only_test ~= nil then
+        warn(
+            `both only.case, and only.suite have been set, the case will be run exclusively, other tests in suite '{_state.only_suite.name}' will be skipped\n`
+        )
+    end
 
     local run_test = function(t: Test)
         t.failed = false
@@ -125,16 +160,7 @@ function test.run_tests(): boolean
         end
     end
 
-    exec_listeners({
-        tests = count_tests(),
-        suites = #_state.suites,
-    }, _state.listeners.exec_begin)
-
-    for _, t in ipairs(_state.global_suite) do
-        run_test(t)
-    end
-
-    for _, s in ipairs(_state.suites) do
+    local run_suite = function(s: Suite)
         _state.current_exec_suite = s
         exec_listeners(s, _state.listeners.suite_enter)
         for _, t in ipairs(s.tests) do
@@ -142,6 +168,25 @@ function test.run_tests(): boolean
         end
         exec_listeners(s, _state.listeners.suite_leave)
         _state.current_exec_suite = nil
+    end
+
+    exec_listeners({
+        tests = count_tests(),
+        suites = #_state.suites,
+    }, _state.listeners.exec_begin)
+
+    if _state.only_test ~= nil then
+        run_test(_state.only_test)
+    elseif _state.only_suite ~= nil then
+        run_suite(_state.only_suite)
+    else
+        for _, t in ipairs(_state.global_suite) do
+            run_test(t)
+        end
+
+        for _, s in ipairs(_state.suites) do
+            run_suite(s)
+        end
     end
 
     exec_listeners({
