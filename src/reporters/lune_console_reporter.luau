@@ -4,6 +4,7 @@
 --     -- run tests
 
 local stdio = require("@lune/stdio")
+local fs = require("@lune/fs")
 local types = require("../types")
 local utils = require("../utils")
 local inspect = require("../lib/inspect")
@@ -33,6 +34,10 @@ end
 
 function color(c: stdio.Color, s: string)
     return `{stdio.color(c)}{s}{stdio.color("reset")}`
+end
+
+function style(sty: stdio.Style, s: string)
+    return `{stdio.style(sty)}{s}{stdio.style("reset")}`
 end
 
 function print_test_info_once()
@@ -113,9 +118,24 @@ function handle_complex_info(type: string, data: any): string?
     return nil
 end
 
+function preview_avaliable_line(lines: {string}, line: number): string
+    if (lines[line]) then
+        return ` {style("dim", lines[line])}`
+    end
+    return ""
+end
+
 function reporter.print_failure(type: "CHECK" | "REQUIRE", f: Failure)
     print_test_info_once()
-    print_indent(`{color("red", `{type} FAILED:`)} {f.location.file}:{f.location.line}`)
+    local line = tonumber(f.location.line)
+    print_indent(`{color("red", `{type} FAILED:`)} {f.location.file}:{line}`)
+    if (line) then
+        local spacing = string.rep(" ", #tostring(f.location.line))
+        local source_lines = fs.readFile(f.location.file):split("\n")
+        print_indent(color("blue", `{spacing} |{preview_avaliable_line(source_lines, line - 1)}`))
+        print_indent(color("blue", `{f.location.line} | {source_lines[f.location.line]}`))
+        print_indent(color("blue", `{spacing} |{preview_avaliable_line(source_lines, line + 1)}`))
+    end
     print_indent(`{color("yellow", f.message)}`, 1)
     if f.complex_info ~= nil then
         local complex_msg = handle_complex_info(f.complex_info.type, f.complex_info.data)
