@@ -146,7 +146,7 @@ function reporter.print_failure(type: "CHECK" | "REQUIRE", f: Failure)
         for i = range, 1, -1 do
             print_preview_dim_line(source_lines, line - i, longest_line_len)
         end
-        print_indent(color("blue", `{style("bold", make_padded_line(line, longest_line_len))}{color("blue", ` | {style("bold",source_lines[f.location.line])}`)}`))
+        print_indent(style("bold", color("blue", `{make_padded_line(line, longest_line_len)} | {source_lines[f.location.line]}`)))
         for i = 1, range, 1 do
             print_preview_dim_line(source_lines, line + i, longest_line_len)
         end
