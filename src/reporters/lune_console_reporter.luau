@@ -4,6 +4,7 @@
 --     -- run tests
 
 local stdio = require("@lune/stdio")
+local fs = require("@lune/fs")
 local types = require("../types")
 local utils = require("../utils")
 local inspect = require("../lib/inspect")
@@ -14,6 +15,8 @@ type TableDiff = types.TableDiff
 type TestError = types.TestError
 
 local reporter = {}
+
+reporter.line_preview_range = 3
 
 local _state = {}
 _state.indent = 0
@@ -33,6 +36,10 @@ end
 
 function color(c: stdio.Color, s: string)
     return `{stdio.color(c)}{s}{stdio.color("reset")}`
+end
+
+function style(sty: stdio.Style, s: string)
+    return `{stdio.style(sty)}{s}{stdio.style("reset")}`
 end
 
 function print_test_info_once()
@@ -113,9 +120,37 @@ function handle_complex_info(type: string, data: any): string?
     return nil
 end
 
+function make_padded_line(line: number, longest: number): string
+    return `{line}{string.rep(" ", longest - #tostring(line))}`
+end
+
+function print_preview_dim_line(source_lines: {string}, line: number, longest: number)
+    if (source_lines[line] == nil) then
+        return
+    end
+    print_indent(style("dim", color("white", `{make_padded_line(line, longest)} | {source_lines[line]}`)))
+end
+
 function reporter.print_failure(type: "CHECK" | "REQUIRE", f: Failure)
     print_test_info_once()
-    print_indent(`{color("red", `{type} FAILED:`)} {f.location.file}:{f.location.line}`)
+    local line = tonumber(f.location.line)
+    print_indent(`{color("red", `{type} FAILED:`)} {f.location.file}:{line}`)
+    if (line) then
+        local range = reporter.line_preview_range
+        local possible_lines = {}
+        for i = -range, range do
+            table.insert(possible_lines, #tostring(line + i))
+        end
+        local longest_line_len = math.max(unpack(possible_lines))
+        local source_lines = fs.readFile(f.location.file):split("\n")
+        for i = range, 1, -1 do
+            print_preview_dim_line(source_lines, line - i, longest_line_len)
+        end
+        print_indent(style("bold", color("blue", `{make_padded_line(line, longest_line_len)} | {source_lines[f.location.line]}`)))
+        for i = 1, range, 1 do
+            print_preview_dim_line(source_lines, line + i, longest_line_len)
+        end
+    end
     print_indent(`{color("yellow", f.message)}`, 1)
     if f.complex_info ~= nil then
         local complex_msg = handle_complex_info(f.complex_info.type, f.complex_info.data)
