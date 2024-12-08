@@ -13,7 +13,7 @@ end
 
 function run_tests()
     local frktest = require("@frktest/frktest")
-    local console_reporter = require("@frktest/reporters/console_reporter")
+    local console_reporter = require("@frktest/reporters/lune_console_reporter")
 
     console_reporter.init()
     local success = frktest.run()
