@@ -17,10 +17,17 @@ function run_tests()
 
     console_reporter.init()
     local success = frktest.run()
-    if not success then
-        require("@lune/process").exit(1)
-    end
+    return success
 end
 
 load_tests()
-run_tests()
+local passed = run_tests()
+
+-- return non-0 exit code on failure (runtime-dependent)
+if not passed then
+    -- use the version of your preferred runtime
+    -- require("@lune/process").exit(1)
+
+    -- this might do the trick in a version-agnostic way, but it's noisy
+    -- error("tests failed")
+end
