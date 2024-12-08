@@ -17,7 +17,7 @@ see [issue](https://github.com/jsdotlua/jest-lua/issues/2) for tracking)
 - Pretty ergonomic to write (I think so)
 - Assertion library, including table & array checks with diff printing, should_error, and a few more!
 - Builtin console reporter with **colors**
-- (undocumented) api to implement custom reporters (see [lune_console_reporter.luau](src/reporters/lune_console_reporter.luau) for sample use)
+- (undocumented) api to implement custom reporters (see [console_reporter.luau](src/reporters/console_reporter.luau) for sample use)
 
 ### What does it look like tho?
 
@@ -139,7 +139,7 @@ the examples, replace `require("@frktest/frktest")` with
 ```luau
 -- from project root
 local frktest = require("./lune_packages/frktest")
-local lune_console_reporter = frktest._reporters.lune_console_reporter
+local console_reporter = frktest._reporters.console_reporter
 ```
 
 A sample pesde project using frktest can be found here: https://github.com/itsfrank/frktest-pesde-sample
@@ -197,8 +197,8 @@ The framework does not have a cli or test discovery. So you need to make an entr
 require("./some_test")()
 
 -- initialize a reporter (there is currently only one... this one, but you can make your own!)
-local lune_console_reporter = require("@frktest/reporters/lune_console_reporter")
-lune_console_reporter.init()
+local console_reporter = require("@frktest/reporters/console_reporter")
+console_reporter.init()
 
 -- run the tests
 local frktest = require("@frktest/frktest")

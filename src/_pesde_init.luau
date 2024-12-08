@@ -3,7 +3,8 @@
 local frktest = require("./frktest")
 
 local reporters = {
-    lune_console_reporter = require("./reporters/lune_console_reporter"),
+    lune_console_reporter = require("./reporters/console_reporter"), --- kept only for backwards compatibility
+    console_reporter = require("./reporters/console_reporter"),
 }
 
 type T = typeof(frktest) & { _reporters: typeof(reporters) }
