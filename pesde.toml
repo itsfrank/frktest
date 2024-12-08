@@ -15,7 +15,7 @@ includes = [
 
 [target]
 environment = "lune"
-lib = "src/_pesde_init.luau"
+lib = "src/init.luau"
 
 [indices]
 default = "https://github.com/daimond113/pesde-index"
