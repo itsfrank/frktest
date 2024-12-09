@@ -13,6 +13,14 @@ if runtime == "lune" then
     color = function(c, s: string)
         return `{stdio.color(c)}{s}{stdio.color("reset")}`
     end
+elseif runtime == "zune" then
+    local stdio = zune.stdio
+    color = function(c, s: string)
+        if c == "purple" then
+            c = "magenta" :: any
+        end
+        return `{stdio.color(c)}{s}{stdio.reset()}`
+    end
 end
 
 return color :: ColorFn

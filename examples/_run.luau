@@ -26,7 +26,8 @@ local passed = run_tests()
 -- return non-0 exit code on failure (runtime-dependent)
 if not passed then
     -- use the version of your preferred runtime
-    -- require("@lune/process").exit(1)
+    -- require("@lune/process").exit(1) -- lune
+    -- zune.process.exit(1) -- zune
 
     -- this might do the trick in a version-agnostic way, but it's noisy
     -- error("tests failed")
