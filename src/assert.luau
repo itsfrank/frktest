@@ -1,4 +1,4 @@
-local types = require("./types")
+local types = require("./types.luau")
 
 type Failure = types.Failure
 
@@ -7,9 +7,9 @@ _state.listeners = {}
 _state.listeners.check_failed = {} :: { (Failure) -> nil }
 _state.listeners.require_failed = {} :: { (Failure) -> nil }
 _state.current_user_msg = nil :: string?
-_state = require("./state").get_state("assert", _state)
+_state = require("./state.luau").get_state("assert", _state)
 
-local test = require("./test")
+local test = require("./test.luau")
 
 function exec_listeners<T>(i: T, listeners: { (T) -> nil })
     for _, l in ipairs(listeners) do
@@ -91,7 +91,7 @@ assert.require.array = {}
 assert.check.table = {}
 assert.require.table = {}
 
-local assert_impl = require("./assert_impl")
+local assert_impl = require("./assert_impl.luau")
 
 -- value assertions
 assert.check.equal = make_check(assert_impl.equal)

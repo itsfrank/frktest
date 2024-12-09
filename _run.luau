@@ -3,8 +3,8 @@ function load_tests()
 end
 
 function run_tests()
-    local frktest = require("./../../src/frktest.luau")
-    local console_reporter = require("./../../src/reporters/console_reporter.luau")
+    local frktest = require("./src/frktest.luau")
+    local console_reporter = require("./src/console_reporter.luau")
 
     console_reporter.init()
     frktest.run()

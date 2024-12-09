@@ -1,5 +1,5 @@
-local types = require("./types")
-local utils = require("./utils")
+local types = require("./types.luau")
+local utils = require("./utils.luau")
 
 type Failure = types.Failure
 type DiffEntry<T> = types.DiffEntry<T>
@@ -206,7 +206,7 @@ function assert_impl.table_contains(t: any, keys: any | { [number]: any }): Fail
     return make_failure(`missing keys: {table.concat(missing, ", ")}`)
 end
 
-local ltdiff = require("./lib/ltdiff")
+local ltdiff = require("./lib/ltdiff.luau")
 function assert_impl.table_equal(a: any, b: any): Failure?
     -- ensure inputs are tables
     if typeof(a) ~= "table" then

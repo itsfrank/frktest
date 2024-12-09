@@ -132,13 +132,13 @@ Create alias in `.luaurc`:
 ```
 
 **Note**: If you want to use the generated luau file in `./lune_packages`, in
-the examples, replace `require("@frktest/frktest")` with
-`require("./lune_packages/frktest")`. Reporters will be avilable in the
+the examples, replace `require("./../src/frktest.luau")` with
+`require("./lune_packages/frktest.luau")`. Reporters will be avilable in the
 `_reporters` member:
 
 ```luau
 -- from project root
-local frktest = require("./lune_packages/frktest")
+local frktest = require("./lune_packages/frktest.luau")
 local console_reporter = frktest._reporters.console_reporter
 ```
 
@@ -194,14 +194,14 @@ The framework does not have a cli or test discovery. So you need to make an entr
 -- filename: _run.luau
 
 -- require test files and call the returned function
-require("./some_test")()
+require("./some_test.luau")()
 
 -- initialize a reporter (there is currently only one... this one, but you can make your own!)
-local console_reporter = require("@frktest/reporters/console_reporter")
+local console_reporter = require("./../src/reporters/console_reporter.luau")
 console_reporter.init()
 
 -- run the tests
-local frktest = require("@frktest/frktest")
+local frktest = require("./../src/frktest.luau")
 frktest.run()
 ```
 
@@ -216,7 +216,7 @@ Then you can run this file with lune like so:
 I suggest you use these requires (but you do what you want!):
 
 ```lua
-local frktest = require("@frktest/frktest")
+local frktest = require("./../src/frktest.luau")
 local test = frktest.test
 local check = frktest.assert.check
 local req = frktest.assert.require

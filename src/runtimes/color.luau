@@ -21,6 +21,18 @@ elseif runtime == "zune" then
         end
         return `{stdio.color(c)}{s}{stdio.reset()}`
     end
+elseif runtime == "seal" then
+    local colors = require("@std/io/colors")
+    local fn_map = {
+        red = colors.red,
+        green = colors.green,
+        yellow = colors.yellow,
+        purple = colors.magenta,
+    }
+
+    color = function(c, s: string)
+        return fn_map[c](s)
+    end
 end
 
 return color :: ColorFn

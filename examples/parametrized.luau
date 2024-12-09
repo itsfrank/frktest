@@ -3,7 +3,7 @@
 -- and logic are separated so that you can run the same test logic on multiple
 -- input/output pairs
 
-local frktest = require("@frktest/frktest")
+local frktest = require("./../src/frktest.luau")
 local test = frktest.test
 local check = frktest.assert.check
 

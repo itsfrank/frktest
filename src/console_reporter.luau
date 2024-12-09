@@ -1,11 +1,11 @@
 -- usage:
---     local reporter = require("./../src/reporters/console_reporter.luau")
+--     local reporter = require("./src/reporters/console_reporter.luau")
 --     reporter.init()
 --     -- run tests
 
-local types = require("./../types.luau")
-local utils = require("./../utils.luau")
-local inspect = require("./../lib/inspect.luau")
+local types = require("./types.luau")
+local utils = require("./utils.luau")
+local inspect = require("./lib/inspect.lua")
 local color = require("./runtimes/color.luau")
 
 type Failure = types.Failure
@@ -21,7 +21,7 @@ _state.current_suite = nil :: types.Suite?
 _state.current_test = nil :: types.Test?
 _state.suite_printed = false
 _state.test_printed = false
-_state = require("./../state.luau").get_state("console_reporter", _state)
+_state = require("./state.luau").get_state("console_reporter", _state)
 
 function print_indent(s: string, offset: number?)
     if offset == nil then
@@ -158,9 +158,10 @@ function reporter.print_summary(ran: number, passed: number, failed: number, ski
     print(`status: {status}`)
 end
 
+local test = require("./test.luau")
+local assert = require("./assert.luau")
 function reporter.init()
     -- register testing events to keep track of current testing state
-    local test = require("./../test.luau")
     test.on_suite_enter(function(s)
         _state.suite_printed = false
         _state.current_suite = s
@@ -191,7 +192,6 @@ function reporter.init()
         reporter.print_test_error(e)
     end)
 
-    local assert = require("./../assert.luau")
     assert.on_check_failed(function(f)
         reporter.print_failure("CHECK", f)
     end)

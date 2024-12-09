@@ -1,4 +1,4 @@
-local frktest = require("@frktest/frktest")
+local frktest = require("./../src/frktest.luau")
 local test = frktest.test
 local check = frktest.assert.check
 local req = frktest.assert.require
