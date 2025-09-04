@@ -9,13 +9,16 @@ includes = [
 	"pesde.toml",
 	"README.md",
 	"LICENSE",
-	"src",
-	".luaurc",
+	"src/**",
 ]
 
 [target]
 environment = "lune"
 lib = "src/init.luau"
 
+[engines]
+pesde = "^0.7.0"
+lune = "^0.10.0"
+
 [indices]
-default = "https://github.com/daimond113/pesde-index"
+default = "https://github.com/pesde-pkg/index"

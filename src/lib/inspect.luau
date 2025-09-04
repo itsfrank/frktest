@@ -1,3 +1,4 @@
+--!nonstrict
 -- adapted from: https://github.com/kikito/inspect.lua
 --[[
 Changes by @itsfrank:

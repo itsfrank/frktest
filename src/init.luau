@@ -1,8 +1,8 @@
 -- i'm not a fan of having a single entrypoint, but this seems to be idiomatic for pesde/wally
 -- with this, reporters will be acessible to folks who want to consume the lib through a single entrypoint
-local frktest = require("./frktest")
+local frktest = require("@self/frktest")
 
-local console_reporter = require("./reporters/console_reporter")
+local console_reporter = require("@self/reporters/console_reporter")
 type ConsoleReporter = typeof(console_reporter)
 
 local reporters = {
