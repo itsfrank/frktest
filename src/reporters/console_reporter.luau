@@ -21,7 +21,6 @@ _state.current_suite = nil :: types.Suite?
 _state.current_test = nil :: types.Test?
 _state.suite_printed = false
 _state.test_printed = false
-_state = require("../state").get_state("console_reporter", _state)
 
 function print_indent(s: string, offset: number?)
     if offset == nil then

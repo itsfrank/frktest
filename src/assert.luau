@@ -7,7 +7,6 @@ _state.listeners = {}
 _state.listeners.check_failed = {} :: { (Failure) -> nil }
 _state.listeners.require_failed = {} :: { (Failure) -> nil }
 _state.current_user_msg = nil :: string?
-_state = require("./state").get_state("assert", _state)
 
 local test = require("./test")
 

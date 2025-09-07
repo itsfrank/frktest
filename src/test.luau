@@ -30,8 +30,6 @@ _state.listeners.exec_begin = {} :: { (ExecCounts) -> nil }
 _state.listeners.exec_end = {} :: { (ExecResult) -> nil }
 _state.listeners.test_error = {} :: { (TestError) -> nil }
 
-_state = require("./state").get_state("test", _state)
-
 function get_current_load_suite_tests(): { Test }
     local suite_test = _state.global_suite
     if _state.current_load_suite ~= nil then
