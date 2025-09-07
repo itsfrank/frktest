@@ -1,7 +1,7 @@
 name = "itsfrank/frktest"
 version = "0.0.3"
 description = "A basic test framework for Lune"
-authors = ["Francis O'Brien <github.com/itsfrank>"]
+authors = ["Francis O'Brien (github.com/itsfrank)"]
 repository = "https://github.com/itsfrank/frktest"
 license = "MIT"
 
@@ -14,7 +14,7 @@ includes = [
 ]
 
 [target]
-environment = "lune"
+environment = "luau"
 lib = "src/entrypoint.luau"
 
 [indices]
