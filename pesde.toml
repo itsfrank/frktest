@@ -7,7 +7,7 @@ license = "MIT"
 
 includes = [
 	"pesde.toml",
-	"README.md",
+	"readme.md",
 	"LICENSE",
 	"src",
 	".luaurc",
