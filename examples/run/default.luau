@@ -1,13 +1,13 @@
 function load_tests()
     -- tests execute in the order they are loaded
-    require("./suites_cases")()
-    require("./basic_assertions")()
-    require("./messages")()
-    require("./errors")()
-    require("./parametrized")()
-    require("./arrays")()
-    require("./tables")()
-    require("./skip")()
+    require("../suites_cases")()
+    require("../basic_assertions")()
+    require("../messages")()
+    require("../errors")()
+    require("../parametrized")()
+    require("../arrays")()
+    require("../tables")()
+    require("../skip")()
     -- require("./focus")() -- this file contains test.focus definitions, uncomment and only these definitions will run
 end
 

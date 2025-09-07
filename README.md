@@ -196,7 +196,7 @@ All example assume you created a `require` alias `"@frktest"` in your project's 
 
 #### Running tests
 
-The framework does not have a cli or test discovery. So you need to make an entrypoint file, see [examples/_run.luau](examples/_run.luau) for how I made mine. But basically all you need is this:
+The framework does not have a cli or test discovery. So you need to make an entrypoint file, see [examples/run/default.luau](examples/run/default.luau) for how I made mine. But basically all you need is this:
 
 ```lua
 -- filename: _run.luau
