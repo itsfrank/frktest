@@ -136,19 +136,19 @@ Create alias in `.luaurc`:
 ```jsonc
 {
   "aliases": {
-    "frktest": "lune_packages/.pesde/itsfrank+frktest/0.0.2/frktest/src/"
+    "frktest": "luau_packages/.pesde/itsfrank+frktest/0.0.2/frktest/src/"
   }
 }
 ```
 
-**Note**: If you want to use the generated luau file in `./lune_packages`, in
+**Note**: If you want to use the generated luau file in `./luau_packages`, in
 the examples, replace `require("@frktest/frktest")` with
-`require("./lune_packages/frktest")`. Reporters will be avilable in the
+`require("./luau_packages/frktest")`. Reporters will be avilable in the
 `_reporters` member:
 
 ```luau
 -- from project root
-local frktest = require("./lune_packages/frktest")
+local frktest = require("./luau_packages/frktest")
 local console_reporter = frktest._reporters.console_reporter
 ```
 
