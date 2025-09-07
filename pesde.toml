@@ -1,7 +1,7 @@
 name = "itsfrank/frktest"
-version = "0.0.2"
-description = "A basic test framework for Lune"
-authors = ["Francis O'Brien <github.com/itsfrank>"]
+version = "0.0.3"
+description = "A basic test framework for standalone Luau"
+authors = ["Francis O'Brien (github.com/itsfrank)"]
 repository = "https://github.com/itsfrank/frktest"
 license = "MIT"
 
@@ -14,8 +14,8 @@ includes = [
 ]
 
 [target]
-environment = "lune"
-lib = "src/init.luau"
+environment = "luau"
+lib = "src/entrypoint.luau"
 
 [indices]
-default = "https://github.com/daimond113/pesde-index"
+default = "https://github.com/pesde-pkg/index"
