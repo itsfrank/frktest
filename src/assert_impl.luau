@@ -9,7 +9,6 @@ local assert_impl = {}
 
 function make_failure(message: string): Failure
     local file, line = debug.info(5, "sl")
-    file = utils.clean_filename(file)
     return {
         location = {
             file = file,

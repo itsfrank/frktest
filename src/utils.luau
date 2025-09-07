@@ -1,11 +1,5 @@
 local utils = {}
 
--- i think this is a lune issue, but debug.info returns [string "<filename>"]
-function utils.clean_filename(name: string): string
-    local front_trimmed = name:sub(10)
-    return front_trimmed:sub(1, -3)
-end
-
 function utils.trim(s: string): string
     return (s:gsub("^%s*(.-)%s*$", "%1"))
 end

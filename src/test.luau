@@ -156,7 +156,6 @@ function test.run_tests(): boolean
                 end
                 local strace = debug.traceback("", 2)
                 local file, line = debug.info(3, "sl")
-                file = utils.clean_filename(file)
                 exec_listeners({
                     location = {
                         file = file,
