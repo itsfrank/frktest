@@ -1,6 +1,6 @@
 # frktest
 
-A basic unit test framework for [lune](https://github.com/lune-org/lune).
+A basic unit test framework for standalone Luau. [lune](https://github.com/lune-org/lune).
 
 I developed this mostly for myself at a time where there were no alternatives
 for Lune. I plan to keep it simple and use it for my projects that dont require
@@ -18,6 +18,11 @@ see [issue](https://github.com/jsdotlua/jest-lua/issues/2) for tracking)
 - Assertion library, including table & array checks with diff printing, should_error, and a few more!
 - Builtin console reporter with **colors**
 - (undocumented) api to implement custom reporters (see [console_reporter.luau](src/reporters/console_reporter.luau) for sample use)
+
+frktest supports multiple runtimes, while any runtime should work, output colors require runtime-specific implementations, currently the following runtimes have output colors:
+- [lune](https://github.com/lune-org/lune)
+- [zune](https://github.com/Scythe-Technology/zune)
+- (soon!) [lute](https://github.com/luau-lang/lute)
 
 ### What does it look like tho?
 
