@@ -25,7 +25,7 @@ runtimes have output colors:
 
 - [lune](https://github.com/lune-org/lune)
 - [zune](https://github.com/Scythe-Technology/zune)
-- (soon!) [lute](https://github.com/luau-lang/lute)
+- [lute](https://github.com/luau-lang/lute)
 
 ### What does it look like tho?
 
