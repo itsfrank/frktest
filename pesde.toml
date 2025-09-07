@@ -1,6 +1,6 @@
 name = "itsfrank/frktest"
 version = "0.0.3"
-description = "A basic test framework for Lune"
+description = "A basic test framework for standalone Luau"
 authors = ["Francis O'Brien (github.com/itsfrank)"]
 repository = "https://github.com/itsfrank/frktest"
 license = "MIT"
