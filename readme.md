@@ -19,9 +19,11 @@ see [issue](https://github.com/jsdotlua/jest-lua/issues/2) for tracking)
 - Builtin console reporter with **colors**
 - (undocumented) api to implement custom reporters (see [console_reporter.luau](src/reporters/console_reporter.luau) for sample use)
 
-frktest supports multiple runtimes, while any runtime should work, output
-colors require runtime-specific implementations, currently the following
-runtimes have output colors:
+### Runtimes
+
+frktest is runtime-agnostic. While any runtime should work, output colors
+require runtime-specific implementations, currently the following runtimes have
+output colors:
 
 - [lune](https://github.com/lune-org/lune)
 - [zune](https://github.com/Scythe-Technology/zune)
