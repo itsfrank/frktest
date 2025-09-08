@@ -1,5 +1,5 @@
 name = "itsfrank/frktest"
-version = "0.0.3"
+version = "0.0.4"
 description = "A basic test framework for standalone Luau"
 authors = ["Francis O'Brien (github.com/itsfrank)"]
 repository = "https://github.com/itsfrank/frktest"
@@ -9,7 +9,7 @@ includes = [
 	"pesde.toml",
 	"readme.md",
 	"LICENSE",
-	"src",
+	"src/**",
 	".luaurc",
 ]
 
